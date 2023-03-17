@@ -20,3 +20,25 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//staff
+Route::prefix('user')
+    ->middleware(['auth', 'isUser'])
+    ->group(function () {});
+
+Route::prefix('admin')
+    ->middleware(['auth', 'isAdmin'])
+    ->group(function () {
+        Route::controller(App\Http\Controllers\UserController::class)->group(function () {
+            //go to customerAccountManagement
+            Route::get('/user/manage', 'view')->name('user_view');
+            //deactivate the user
+            Route::get('/deactivateUser/{id}', 'deactivateUser')->name('deactivateUser');
+            //reactivate the user
+            Route::get('/reactivateUser/{id}', 'reactivateUser')->name('reactivateUser');
+
+            Route::get('/user/profile', 'profile')->name('profile_view');
+            Route::get('/user/profile/{id}', 'profileUser')->name('profile_user_view');
+            Route::post('/user/profile/update', 'profileUpdate')->name('profile_update');
+        });
+    });
