@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\user;
 use Auth;
@@ -35,13 +36,17 @@ class UserController extends Controller
     {
         $profile = User::find(Auth::id());
 
-        return view('auth/profile')->with('profile', $profile);
+        return view('auth/profile')
+            ->with('profile', $profile)
+            ->with('check', 'user');
     }
     public function profileUser($id)
     {
         $profile = User::find($id);
 
-        return view('auth/profile')->with('profile', $profile);
+        return view('auth/profile')
+            ->with('profile', $profile)
+            ->with('check', 'admin');
     }
     public function profileUpdate()
     {
@@ -53,18 +58,40 @@ class UserController extends Controller
         ];
 
         $validator = Validator::make($r->all(), $rules);
-        if($validator->fails()){
-            return back()->withErrors($validator->errors())->withInput();
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator->errors())
+                ->withInput();
         }
         $profile = User::find($r->id);
 
         $profile->name = $r->name;
         $profile->phone = $r->phone;
         $profile->save();
-        if($profile->role==1){
-            return redirect()->route('profile_view');
-        }else{
-            return redirect()->route('user_view');
+
+        return redirect()->route('profile_view');
+    }
+    public function profileUpdateUser()
+    {
+        $r = request();
+        //valdiate
+        $rules = [
+            'name' => 'required|string',
+            'phone' => 'required|string|min:10',
+        ];
+
+        $validator = Validator::make($r->all(), $rules);
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator->errors())
+                ->withInput();
         }
+        $profile = User::find($r->id);
+
+        $profile->name = $r->name;
+        $profile->phone = $r->phone;
+        $profile->save();
+
+        return redirect()->route('user_view');
     }
 }

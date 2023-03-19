@@ -15,7 +15,6 @@ class AdminMiddleWare
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
         if(Auth::check()){
 
             //staff role ==0
@@ -27,7 +26,7 @@ class AdminMiddleWare
                 Auth::logout();
                 return redirect('/login')->with('message', 'Login to access the website info');
             } else {
-                return redirect('/home')->with('message', 'Access Denied as you are not Super Admin!');
+                return redirect('/home')->with('message', 'Access Denied as you are not Admin!');
             }
         }else{
             return redirect('/login')->with('message', 'Login to access the website info');

@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Blaster System</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -21,6 +21,12 @@
     <!---for deactivate user alert--->
     <div class="alert alert-danger" role="alert">
         {{ Session::get('error') }}
+    </div>
+@endif
+@if (Session::has('message'))
+    <!---for deactivate user alert--->
+    <div class="alert alert-danger" role="alert">
+        {{ Session::get('message') }}
     </div>
 @endif
 
@@ -64,6 +70,20 @@
                                     <a class="nav-link" href="{{ route('user_view') }}">User Manage</a>
                                 </li>
                             @endif
+                            @if (Auth::user()->role == 0)
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        Blasting List
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="">Add Blasting List</a>
+                                        <a class="dropdown-item" href="">Edi Blasting List</a>
+                                        <a class="dropdown-item" href="">Remove Blasting List</a>
+                                    </div>
+                                </li>
+                            @endif
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -71,6 +91,10 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('profile_view') }}">Profile</a>
+                                    @if (Auth::user()->role == 0)
+                                        <a class="dropdown-item" href="{{ route('api_setting') }}">API Setting</a>
+                                    @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

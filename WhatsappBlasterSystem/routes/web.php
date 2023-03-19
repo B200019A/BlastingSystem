@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,6 +16,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/sidebar', function () {
+    return view('layouts/sidebar');
+});
+
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -24,12 +28,24 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //staff
 Route::prefix('user')
     ->middleware(['auth', 'isUser'])
-    ->group(function () {});
+    ->group(function () {
+        Route::controller(App\Http\Controllers\ApiController::class)->group(function () {
+            Route::get('/apiSetting', 'api')->name('api_setting');
+            Route::post('/apiEdit', 'apiEdit')->name('api_edit');
+            Route::post('/apiUpadate', 'apiUpadate')->name('api_update');
+        });
+
+        Route::controller(App\Http\Controllers\Auth\UserController::class)->group(function () {
+            Route::get('/profile', 'profile')->name('profile_view');
+            Route::get('/profile/{id}', 'profileUser')->name('profile_user_view');
+            Route::post('/profile/update', 'profileUpdate')->name('profile_update');
+        });
+    });
 
 Route::prefix('admin')
     ->middleware(['auth', 'isAdmin'])
     ->group(function () {
-        Route::controller(App\Http\Controllers\UserController::class)->group(function () {
+        Route::controller(App\Http\Controllers\Auth\UserController::class)->group(function () {
             //go to customerAccountManagement
             Route::get('/user/manage', 'view')->name('user_view');
             //deactivate the user
@@ -37,8 +53,6 @@ Route::prefix('admin')
             //reactivate the user
             Route::get('/reactivateUser/{id}', 'reactivateUser')->name('reactivateUser');
 
-            Route::get('/user/profile', 'profile')->name('profile_view');
-            Route::get('/user/profile/{id}', 'profileUser')->name('profile_user_view');
-            Route::post('/user/profile/update', 'profileUpdate')->name('profile_update');
+            Route::post('/user/profile/update', 'profileUpdateUser')->name('profile_update_user');
         });
     });
