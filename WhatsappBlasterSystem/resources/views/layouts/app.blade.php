@@ -78,8 +78,9 @@
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="">Add Blasting List</a>
-                                        <a class="dropdown-item" href="">Edi Blasting List</a>
+                                        <a class="dropdown-item" href="{{route('blasting_add_view')}}">Add Blasting List</a>
+                                        <a class="dropdown-item" href="">Edit Blasting List</a>
+                                        <a class="dropdown-item" href="{{route('blasting_view')}}">View Blasting List</a>
                                         <a class="dropdown-item" href="">Remove Blasting List</a>
                                     </div>
                                 </li>

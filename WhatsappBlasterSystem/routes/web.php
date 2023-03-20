@@ -40,6 +40,16 @@ Route::prefix('user')
             Route::get('/profile/{id}', 'profileUser')->name('profile_user_view');
             Route::post('/profile/update', 'profileUpdate')->name('profile_update');
         });
+
+        Route::controller(App\Http\Controllers\BlastingController::class)->group(function (){
+            Route::get('/blasting/index','view')->name('blasting_view');
+            Route::get('/blasting/add/view','add_view')->name('blasting_add_view');
+            Route::post('/blasting/add','add')->name('blasting_add');
+            Route::get('/blasting/edit','edit')->name('blasting_edit_view');
+            Route::post('/blasting/update','update')->name('blasting_update');
+            Route::get('/blasting/delete/{id}','delete')->name('blasting_delete');
+
+        });
     });
 
 Route::prefix('admin')
