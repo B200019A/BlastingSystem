@@ -50,6 +50,16 @@ Route::prefix('user')
             Route::get('/blasting/delete/{id}','delete')->name('blasting_delete');
 
         });
+
+        Route::controller(App\Http\Controllers\MessageController::class)->group(function (){
+            Route::get('/meesage/index','view')->name('message_view');
+            Route::get('/meesage/add/view','add_view')->name('message_add_view');
+            Route::post('/meesage/add','add')->name('message_add');
+            Route::get('/meesage/edit','edit')->name('message_edit_view');
+            Route::post('/meesage/update','update')->name('message_update');
+            Route::get('/meesage/delete/{id}','delete')->name('message_delete');
+
+        });
     });
 
 Route::prefix('admin')

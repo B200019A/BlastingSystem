@@ -17,7 +17,7 @@
                         @foreach ($blastingLists as $blastingList)
                                 <tr>
                                     <td>{{ $blastingList->name }}</td>
-                                    <td> {{ $blastingList->customerlists->count() }}</td>
+                                    <td>?</td>
                                     <td><a href="{{ route('blasting_edit_view', ['id' => $blastingList->id]) }}" class="btn btn-primary btn-xs">Edit</a>
                                         <a href="{{ route('blasting_delete', ['id' => $blastingList->id]) }}"
                                              onClick="return confirm('Are you sure to delete?')" class="btn btn-primary btn-xs">Delete</a></td>
