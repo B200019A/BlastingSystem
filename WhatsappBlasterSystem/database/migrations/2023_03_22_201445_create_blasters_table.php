@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('message_lists', function (Blueprint $table) {
+        Schema::create('blasters', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');
-            $table->string('message');
-            $table->string('blastinglist_id');
-            $table->dateTime('send_time');
+            $table->string('name');
             $table->softDeletes('deleted_at');
             $table->timestamps();
         });
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('message_lists');
+        Schema::dropIfExists('blasters');
     }
 };

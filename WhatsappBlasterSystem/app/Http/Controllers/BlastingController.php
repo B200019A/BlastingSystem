@@ -3,33 +3,33 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\BlastingList;
-use App\Models\CustomerList;
+use App\Models\Blaster;
+use App\Models\Customer;
 use Auth;
 
 class BlastingController extends Controller
 {
     public function view(){
 
-        $blastingLists = BlastingList::where('user_id',Auth::id())->get();
+        $data['blasters'] = Blaster::where('user_id',Auth::id())->get();
 
-        return view('user/blastinglist/index')->with('blastingLists',$blastingLists);
+        return view('user/blaster/index',$data);
 
     }
     public function add_view()
     {
-        return view('user/blastinglist/add');
+        return view('user/blaster/add');
     }
 
     public function add(Request $request)
     {
 
-        $blasting = BlastingList::create([
+        $blasting = Blaster::create([
             'user_id' => Auth::id(),
-            'name' => $request->blasting_name,
+            'name' => $request->blaster_name,
         ]);
 
-        return redirect()->route('blasting_view');
+        return redirect()->route('blaster_view');
     }
     public function delete($id)
     {
@@ -38,11 +38,11 @@ class BlastingController extends Controller
         //recovery the data
         // dd($deleteBlasting->restore());
 
-        $blasting = BlastingList::find($id);
+        $blaster = Blaster::find($id);
 
         //validation
-        if(Auth::id() == $blasting->user_id){
-            $blasting->delete();//soft delete
+        if(Auth::id() == $blaster->user_id){
+            $blaster->delete();//soft delete
         }
 
         return redirect()->route('blasting_view')->with('messages','delete successfully!');

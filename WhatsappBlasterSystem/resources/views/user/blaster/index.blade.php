@@ -13,13 +13,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if ($blastingLists->count() != null)
-                        @foreach ($blastingLists as $blastingList)
+                    @if ($blasters->isNotEmpty())
+                        @foreach ($blasters as $blaster)
                                 <tr>
-                                    <td>{{ $blastingList->name }}</td>
-                                    <td>?</td>
-                                    <td><a href="{{ route('blasting_edit_view', ['id' => $blastingList->id]) }}" class="btn btn-primary btn-xs">Edit</a>
-                                        <a href="{{ route('blasting_delete', ['id' => $blastingList->id]) }}"
+                                    <td>{{ $blaster->name }}</td>
+                                    <td> {{ $blaster->customers->count() }}</td>
+                                    <td><a href="{{ route('blaster_edit_view', ['id' => $blaster->id]) }}" class="btn btn-primary btn-xs">Edit</a>
+                                        <a href="{{ route('blaster_delete', ['id' => $blaster->id]) }}"
                                              onClick="return confirm('Are you sure to delete?')" class="btn btn-primary btn-xs">Delete</a></td>
                                 </tr>
                             @endforeach

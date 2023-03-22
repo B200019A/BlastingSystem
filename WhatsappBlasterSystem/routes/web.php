@@ -20,6 +20,29 @@ Route::get('/sidebar', function () {
     return view('layouts/sidebar');
 });
 
+Route::get('test', function(){
+    $messages = \App\Models\MessageList::get();
+
+    foreach($messages as $message){
+        $oriText = $message->message;
+
+        foreach($message->blastinglists->customerlists as $costomer){
+            $oriText = str_replace('[attribute1]', $costomer->attribute1, $oriText);
+            $oriText = str_replace('[attribute2]', $costomer->attribute2, $oriText);
+            $oriText = str_replace('[attribute3]', $costomer->attribute3, $oriText);
+            $oriText = str_replace('[attribute4]', $costomer->attribute4, $oriText);
+            $oriText = str_replace('[attribute5]', $costomer->attribute5, $oriText);
+            $oriText = str_replace('[attribute6]', $costomer->attribute6, $oriText);
+            $oriText = str_replace('[attribute7]', $costomer->attribute7, $oriText);
+            $oriText = trim($oriText);
+            dd($oriText);
+            // $breasting->breast_messages()->create([
+            //     'costomer_id' => $costomer->id,
+            //     'message' => $oriText
+            // ]);
+        }
+    }
+});
 
 Auth::routes();
 
@@ -42,12 +65,12 @@ Route::prefix('user')
         });
 
         Route::controller(App\Http\Controllers\BlastingController::class)->group(function (){
-            Route::get('/blasting/index','view')->name('blasting_view');
-            Route::get('/blasting/add/view','add_view')->name('blasting_add_view');
-            Route::post('/blasting/add','add')->name('blasting_add');
-            Route::get('/blasting/edit','edit')->name('blasting_edit_view');
-            Route::post('/blasting/update','update')->name('blasting_update');
-            Route::get('/blasting/delete/{id}','delete')->name('blasting_delete');
+            Route::get('/blaster/index','view')->name('blaster_view');
+            Route::get('/blaster/add/view','add_view')->name('blaster_add_view');
+            Route::post('/blaster/add','add')->name('blaster_add');
+            Route::get('/blaster/edit','edit')->name('blaster_edit_view');
+            Route::post('/blaster/update','update')->name('blasterupdate');
+            Route::get('/blaster/delete/{id}','delete')->name('blaster_delete');
 
         });
 
@@ -55,7 +78,7 @@ Route::prefix('user')
             Route::get('/meesage/index','view')->name('message_view');
             Route::get('/meesage/add/view','add_view')->name('message_add_view');
             Route::post('/meesage/add','add')->name('message_add');
-            Route::get('/meesage/edit','edit')->name('message_edit_view');
+            Route::get('/meesage/edit/{id}','edit')->name('message_edit_view');
             Route::post('/meesage/update','update')->name('message_update');
             Route::get('/meesage/delete/{id}','delete')->name('message_delete');
 

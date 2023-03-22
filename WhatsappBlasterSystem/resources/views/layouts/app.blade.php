@@ -74,27 +74,27 @@
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                        Blasting List
+                                        List
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="{{ route('blasting_add_view') }}">Add Blasting
+                                        <a class="dropdown-item" href="{{ route('blaster_add_view') }}">Add
                                             List</a>
-                                        <a class="dropdown-item" href="">Edit Blasting List</a>
-                                        <a class="dropdown-item" href="{{ route('blasting_view') }}">View Blasting List</a>
+                                        <a class="dropdown-item" href="">Edit List</a>
+                                        <a class="dropdown-item" href="{{ route('blaster_view') }}">View List</a>
                                     </div>
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                        Message List
+                                        Message
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="{{ route('message_add_view') }}">Add Message
-                                            List</a>
+                                            </a>
                                         <a class="dropdown-item" href="">Edit Message List</a>
-                                        <a class="dropdown-item" href="{{ route('message_view') }}">View Message List</a>
+                                        <a class="dropdown-item" href="{{ route('message_view') }}">View Message</a>
                                     </div>
                                 </li>
                             @endif

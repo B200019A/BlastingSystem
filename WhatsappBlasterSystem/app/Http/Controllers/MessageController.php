@@ -3,25 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\BlastingList;
-use App\Models\MessageList;
-use App\Models\CustomerList;
+use App\Models\Blaster;
+use App\Models\Message;
+use App\Models\Customer;
 use Auth;
 use DateTime;
 class MessageController extends Controller
 {
     public function view()
     {
-        $messageLists = MessageList::where('user_id', Auth::id())->get();
+        $data['messages'] = Message::where('user_id', Auth::id())->get();
 
-        // dd($blastingLists);
-        return view('user/blastinglist/index')->with('messageLists', $messageLists);
+        return view('user/message/index', $data);
     }
     public function add_view()
     {
-        $blastingLists = BlastingList::where('user_id', Auth::id())->get();
+        $data['blasters'] = Blaster::where('user_id', Auth::id())->get();
 
-        return view('user/messagelist/add')->with('blastingLists', $blastingLists);
+        return view('user/message/add', $data);
     }
 
     public function add(Request $request)
@@ -29,16 +28,25 @@ class MessageController extends Controller
         $date = $request->date;
         $time = $request->time;
 
-        $merge= $date.' '.$time;
+        $mergeTime= $date.' '.$time;
 
-        $message = MessageList::create([
+        $message = Message::create([
             'user_id' => Auth::id(),
             'message' => $request->message,
-            'blastinglist_id'=> $request->blasting_id,
-            'send_time' => $merge,
+            'blastinglist_id'=> $request->blaster_id,
+            'send_time' => $mergeTime,
+            'status' => 'Available',
         ]);
 
-        return redirect()->route('add_view');
+        return redirect()->route('message_view');
+    }
+    public function edit($id){
+
+        $message = Message::where('id', $id)->first();
+        $blasters = Blaster::where('user_id', Auth::id())->get();
+
+        return view('user/message/add', compact('blasters','message'));
+
     }
     public function delete($id)
     {
@@ -47,7 +55,7 @@ class MessageController extends Controller
         //recovery the data
         // dd($deleteBlasting->restore());
 
-        $messagelist = MessageList::find($id);
+        $messagelist = Message::find($id);
 
         //validation
         if (Auth::id() == $messagelist->user_id) {
