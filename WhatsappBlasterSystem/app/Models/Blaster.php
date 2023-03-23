@@ -16,11 +16,11 @@ class Blaster extends Model
 
     public function customers()
     {
-        return $this->hasMany(Customer::class,'blasting_id','id');
+        return $this->hasMany(Customer::class,'blaster_id','id');
     }
 
     public function messages()
     {
-        return $this->hasOne(Message::class,'blasting_id','id');
+        return $this->hasOne(Message::class,'blaster_id','id');
     }
 }

@@ -3,7 +3,7 @@
     @inject('carbon', 'Carbon\Carbon')
 
     <div class="container col-sm-12   mt-3">
-        <h3>Create new blasting message list</h3>
+        <h3>Create new blaster message list</h3>
         @if (isset($message))
             <form action="{{ route('message_update') }}" method="POST" enctype="multipart/form-data">
             @else
@@ -21,7 +21,7 @@
                     @endif
                 @endforeach
             </select>
-            <label for="blasting_name">message</label>
+            <label for="message">message</label>
             <input class="form-control" type="text" id="message" name="message"
                 value="{{ $message->message ?? null }}">
             @error('message')

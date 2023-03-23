@@ -27,7 +27,7 @@
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="3" class="text-center">Add Blasting List now!</td>
+                                <td colspan="3" class="text-center">Add Blaster List now!</td>
                             </tr>
                         @endif
                 </tbody>
