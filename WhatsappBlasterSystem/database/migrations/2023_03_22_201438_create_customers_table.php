@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->string('blasting_id');
-            $table->string('attribute1');
-            $table->string('attribute2');
-            $table->string('attribute3');
-            $table->string('attribute4');
-            $table->string('attribute5');
-            $table->string('attribute6');
-            $table->string('attribute7');
+            $table->string('blaster_id');
+            $table->string('attribute1')->nullable();;
+            $table->string('attribute2')->nullable();;
+            $table->string('attribute3')->nullable();;
+            $table->string('attribute4')->nullable();;
+            $table->string('attribute5')->nullable();;
+            $table->string('attribute6')->nullable();;
+            $table->string('attribute7')->nullable();;
             $table->softDeletes('deleted_at');
             $table->timestamps();
         });
