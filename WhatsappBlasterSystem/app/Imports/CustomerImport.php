@@ -14,7 +14,7 @@ class CustomerImport implements ToModel, WithHeadingRow
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-    protected $blaster_id;
+    private $blaster_id;
     public function  __construct($blaster_id)
     {
         dd($blaster_id);
@@ -23,7 +23,7 @@ class CustomerImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         return new Customer([
-            'user_id'  => Auth::id(),
+            // 'user_id'  => Auth::id(),
             'blasting_id'  => $this->blaster_id,
             'attribute1' => $row['attribute1'],
             'attribute2' => $row['attribute2'],
