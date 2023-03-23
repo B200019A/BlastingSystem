@@ -6,7 +6,7 @@ use App\Models\Customer;
 use Attribute;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-
+use Auth;
 class CustomerImport implements ToModel, WithHeadingRow
 {
     /**
@@ -14,17 +14,18 @@ class CustomerImport implements ToModel, WithHeadingRow
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-    private $blasting_id;
-    public function __construct($blasting_id)
+
+    private $blaster_id;
+    public function __construct($blaster_id)
     {
-        $this->blasting_id = $blasting_id;
+        $this->blaster_id = $blaster_id;
     }
 
     public function model(array $row)
     {
         return new Customer([
             // 'id'  => $row['user_id'],
-            'blasting_id'  => $this->blasting_id,
+            'blaster_id'  => $this->blaster_id,
             'attribute1' => $row['attribute1'],
             'attribute2' => $row['attribute2'],
             'attribute3' => $row['attribute3'],
