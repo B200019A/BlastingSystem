@@ -24,10 +24,10 @@ class UserMiddleWare
                 return $next($request);
             }else{
                 Auth::logout();
-                return redirect('/login')->with('message', 'Login to access the website info');
+                return redirect('/login')->with('error', 'Login to access the website info');
             }
         }else{
-            return redirect('/login')->with('message', 'Login to access the website info');
+            return redirect('/login')->with('error', 'Login to access the website info');
         }
     }
 }
