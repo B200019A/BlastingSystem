@@ -1,5 +1,6 @@
 <?php
 
+//use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -71,7 +72,11 @@ Route::prefix('user')
             Route::get('/blaster/edit','edit')->name('blaster_edit_view');
             Route::post('/blaster/update','update')->name('blasterupdate');
             Route::get('/blaster/delete/{id}','delete')->name('blaster_delete');
+        });
 
+        Route::controller(App\Http\Controllers\CustomerListController::class)->group(function (){
+            Route::get('/customer/import','import')->name('import_view');
+            Route::post('/customer/import/excel','import_customer')->name('import_customer');
         });
 
         Route::controller(App\Http\Controllers\MessageController::class)->group(function (){
@@ -99,3 +104,4 @@ Route::prefix('admin')
             Route::post('/user/profile/update', 'profileUpdateUser')->name('profile_update_user');
         });
     });
+
