@@ -14,11 +14,17 @@ class CustomerImport implements ToModel, WithHeadingRow
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
+    private $blasting_id;
+    public function __construct($blasting_id)
+    {
+        $this->blasting_id = $blasting_id;
+    }
+
     public function model(array $row)
     {
         return new Customer([
-            'user_id'  => $row['user_id'],
-            'blasting_id'  => $row['blasting_id'],
+            // 'id'  => $row['user_id'],
+            'blasting_id'  => $this->blasting_id,
             'attribute1' => $row['attribute1'],
             'attribute2' => $row['attribute2'],
             'attribute3' => $row['attribute3'],

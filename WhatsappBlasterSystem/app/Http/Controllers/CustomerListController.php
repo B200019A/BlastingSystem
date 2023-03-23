@@ -18,7 +18,8 @@ class CustomerListController extends Controller
         $request->validate([    
             'customer_excel'=>'required|mimes:xlsx,csv,txt' 
         ]);
-        Excel::import(new CustomerImport,$request->file('customer_excel'));
+
+        Excel::import(new CustomerImport($request->input('blasting_id')),$request->file('customer_excel'));
 
         return redirect()->route('import_view');
     }
