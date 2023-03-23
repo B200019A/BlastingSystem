@@ -22,12 +22,12 @@ Route::get('/sidebar', function () {
 });
 
 Route::get('test', function(){
-    $messages = \App\Models\MessageList::get();
+    $messages = \App\Models\Message::get();
 
     foreach($messages as $message){
         $oriText = $message->message;
 
-        foreach($message->blastinglists->customerlists as $costomer){
+        foreach($message->blasters->customers as $costomer){
             $oriText = str_replace('[attribute1]', $costomer->attribute1, $oriText);
             $oriText = str_replace('[attribute2]', $costomer->attribute2, $oriText);
             $oriText = str_replace('[attribute3]', $costomer->attribute3, $oriText);
@@ -69,13 +69,13 @@ Route::prefix('user')
             Route::get('/blaster/index','view')->name('blaster_view');
             Route::get('/blaster/add/view','add_view')->name('blaster_add_view');
             Route::post('/blaster/add','add')->name('blaster_add');
-            Route::get('/blaster/edit','edit')->name('blaster_edit_view');
-            Route::post('/blaster/update','update')->name('blasterupdate');
+            Route::get('/blaster/view/customer/{id}','viewCustomer')->name('blaster_view_customer');
+            Route::post('/blaster/update','update')->name('blaster_update');
             Route::get('/blaster/delete/{id}','delete')->name('blaster_delete');
         });
 
         Route::controller(App\Http\Controllers\CustomerListController::class)->group(function (){
-            Route::get('/customer/import','import')->name('import_view');
+            Route::get('/customer/import/{id}','import')->name('import_view');
             Route::post('/customer/import/excel','import_customer')->name('import_customer');
         });
 
@@ -88,6 +88,10 @@ Route::prefix('user')
             Route::get('/meesage/delete/{id}','delete')->name('message_delete');
 
         });
+
+        // Route::apiResources([
+        //     'blasters' => BlastingController::class,
+        // ]);
     });
 
 Route::prefix('admin')

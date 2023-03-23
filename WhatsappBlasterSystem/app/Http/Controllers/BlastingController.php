@@ -6,15 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\Blaster;
 use App\Models\Customer;
 use Auth;
-
+use Session;
 class BlastingController extends Controller
 {
-    public function view(){
+    public function view()
+    {
+        $data['blasters'] = Blaster::where('user_id', Auth::id())->get();
 
-        $data['blasters'] = Blaster::where('user_id',Auth::id())->get();
-
-        return view('user/blaster/index',$data);
-
+        return view('user/blaster/index', $data);
     }
     public function add_view()
     {
@@ -23,12 +22,10 @@ class BlastingController extends Controller
 
     public function add(Request $request)
     {
-
         $blasting = Blaster::create([
             'user_id' => Auth::id(),
             'name' => $request->blaster_name,
         ]);
-
         return redirect()->route('blaster_view');
     }
     public function delete($id)
@@ -41,11 +38,39 @@ class BlastingController extends Controller
         $blaster = Blaster::find($id);
 
         //validation
-        if(Auth::id() == $blaster->user_id){
-            $blaster->delete();//soft delete
+        if (Auth::id() == $blaster->user_id) {
+            $blaster->delete(); //soft delete
         }
 
-        return redirect()->route('blasting_view')->with('messages','delete successfully!');
+        return redirect()
+            ->route('blasting_view')
+            ->with('messages', 'delete successfully!');
+    }
+    public function viewCustomer($id)
+    {
+        $data['blaster'] = Blaster::where([['id',$id], ['user_id',Auth::id()]])->first();
+
+        //validate
+        if(isset($data['blaster'])){
+            return view('user/blaster/customerlist', $data);
+        }
+
+        return redirect()->route('blaster_view');
+
+
     }
 
+    public function update(Request $request){
+
+        $blaster = Blaster::find($request->blaster_id);
+
+        //validation
+        if (Auth::id() == $blaster->user_id) {
+            $blaster->name = $request->blaster_name;
+            $blaster->save();
+        }
+        Session::flash('success','Edit name successfully');
+        return redirect()->route('blaster_view_customer',$blaster->id);
+
+    }
 }

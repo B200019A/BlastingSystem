@@ -13,20 +13,23 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 @if (Session::has('error'))
-    <!---for deactivate user alert--->
+    <!---for error user alert--->
     <div class="alert alert-danger" role="alert">
         {{ Session::get('error') }}
     </div>
 @endif
-@if (Session::has('message'))
-    <!---for deactivate user alert--->
-    <div class="alert alert-danger" role="alert">
-        {{ Session::get('message') }}
+@if (Session::has('success'))
+    <!---for success alert--->
+    <div class="alert alert-success" role="alert">
+        {{ Session::get('success') }}
     </div>
 @endif
 
@@ -35,7 +38,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    Blaster
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"

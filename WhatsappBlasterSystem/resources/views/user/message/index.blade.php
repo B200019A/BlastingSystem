@@ -11,6 +11,7 @@
                         <th>Meesage</th>
                         <th>List Name</th>
                         <th>Send time</th>
+                        <th>Phone</th>
                         <th>Operates</th>
                     </tr>
                 </thead>
@@ -22,6 +23,7 @@
                                 <td>{{ $message->message }}</td>
                                 <td>{{ $message->blasters->name }}</td>
                                 <td>{{ $message->send_time }}</td>
+                                <td>{{ $message->phone }}</td>
                                 <td><a href="{{ route('message_edit_view', ['id' => $message->id]) }}"
                                         class="btn btn-primary btn-xs">Edit</a>
                                     <a href="{{ route('message_delete', ['id' => $message->id]) }}"

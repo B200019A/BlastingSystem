@@ -4,6 +4,7 @@
     <h3>Upload Excel</h3>
         <form class="row g-3" method="POST" action="{{route('import_customer')}}" enctype="multipart/form-data">
             @csrf
+         <input type="hidden" class="form-control" name="blaster_id" value='{{$blaster_id}}'>
         <input type="file" class="form-control" name="customer_excel">
         <button type="submit" class="btn btn-primary">Upload</button>
         @error('customer_excel')

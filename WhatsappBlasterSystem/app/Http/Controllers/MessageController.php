@@ -7,7 +7,7 @@ use App\Models\Blaster;
 use App\Models\Message;
 use App\Models\Customer;
 use Auth;
-use DateTime;
+
 class MessageController extends Controller
 {
     public function view()
@@ -25,28 +25,39 @@ class MessageController extends Controller
 
     public function add(Request $request)
     {
+        //valdiate
+        $validated = $request->validate([
+            'message' => 'required|string',
+            'date' => 'required|string|unique:users',
+            'time' => 'required|string|min:6',
+            'phone' => 'required|string',
+        ]);
+
         $date = $request->date;
         $time = $request->time;
 
-        $mergeTime= $date.' '.$time;
+        $mergeTime = $date . ' ' . $time;
 
         $message = Message::create([
             'user_id' => Auth::id(),
             'message' => $request->message,
-            'blastinglist_id'=> $request->blaster_id,
+            'blastinglist_id' => $request->blaster_id,
             'send_time' => $mergeTime,
             'status' => 'Available',
+            'phone' => $request->phone,
         ]);
 
         return redirect()->route('message_view');
     }
-    public function edit($id){
-
+    public function edit($id)
+    {
         $message = Message::where('id', $id)->first();
         $blasters = Blaster::where('user_id', Auth::id())->get();
 
-        return view('user/message/add', compact('blasters','message'));
-
+        return view('user/message/add', compact('blasters', 'message'));
+    }
+    public function update()
+    {
     }
     public function delete($id)
     {
