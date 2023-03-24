@@ -65,11 +65,14 @@ class BlastingController extends Controller
         $blaster = Blaster::find($request->blaster_id);
 
         //validation
-        if (Auth::id() == $blaster->user_id) {
-            $blaster->name = $request->blaster_name;
-            $blaster->save();
+        if (Auth::id() != $blaster->user_id) {
+            Session::flash('error','Edit Fail');
+            return redirect()->route('blaster_view');
         }
+        $blaster->name = $request->blaster_name;
+        $blaster->save();
         Session::flash('success','Edit name successfully');
+
         return redirect()->route('blaster_view_customer',$blaster->id);
 
     }

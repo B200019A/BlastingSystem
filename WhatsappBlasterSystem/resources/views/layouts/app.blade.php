@@ -83,7 +83,6 @@
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="{{ route('blaster_add_view') }}">Add
                                             List</a>
-                                        <a class="dropdown-item" href="">Edit List</a>
                                         <a class="dropdown-item" href="{{ route('blaster_view') }}">View List</a>
                                     </div>
                                 </li>
@@ -96,8 +95,8 @@
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="{{ route('message_add_view') }}">Add Message
                                             </a>
-                                        <a class="dropdown-item" href="">Edit Message List</a>
                                         <a class="dropdown-item" href="{{ route('message_view') }}">View Message</a>
+                                        <a class="dropdown-item" href="">View History</a>
                                     </div>
                                 </li>
                             @endif

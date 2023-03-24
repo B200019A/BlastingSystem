@@ -7,12 +7,12 @@ use App\Models\Blaster;
 use App\Models\Message;
 use App\Models\Customer;
 use Auth;
-
+use Session;
 class MessageController extends Controller
 {
     public function view()
     {
-        $data['messages'] = Message::where('user_id', Auth::id())->get();
+        $data['messages'] = Message::where([['status','Available'], ['user_id',Auth::id()]])->get();
 
         return view('user/message/index', $data);
     }
@@ -28,10 +28,22 @@ class MessageController extends Controller
         //valdiate
         $validated = $request->validate([
             'message' => 'required|string',
-            'date' => 'required|string|unique:users',
-            'time' => 'required|string|min:6',
+            'date' => 'required|string',
+            'time' => 'required|string',
             'phone' => 'required|string',
         ]);
+
+        //checking
+        $blaster = Blaster::where('id',$request->blaster_id);
+        if($blaster->user_id != Auth::id()){
+
+            Session::flash('error','Edit Fail');
+            return redirect()->route('message_view');
+        }
+        if($request->phone != ("attribute1" || "attribute2" || "attribute3" || "attribute4" || "attribute5" || "attribute6" || "attribute7")){
+            Session::flash('error','Edit Fail');
+            return redirect()->route('message_view');
+        }
 
         $date = $request->date;
         $time = $request->time;
@@ -51,13 +63,55 @@ class MessageController extends Controller
     }
     public function edit($id)
     {
+
         $message = Message::where('id', $id)->first();
+
+        if($message == null || $message->user_id != Auth::id()){
+            Session::flash('error','Edit Fail');
+            return redirect()->route('message_view');
+        }
         $blasters = Blaster::where('user_id', Auth::id())->get();
 
         return view('user/message/add', compact('blasters', 'message'));
     }
-    public function update()
+    public function update(Request $request)
     {
+
+        $validated = $request->validate([
+            'message' => 'required|string',
+            'date' => 'required|string',
+            'time' => 'required|string',
+            'phone' => 'required|string',
+        ]);
+
+        //checking
+        $blaster = Blaster::where('id',$request->blaster_id)->first();
+        if($blaster->user_id != Auth::id()){
+            Session::flash('error','Edit Fail');
+            return redirect()->route('message_view');
+        }
+        if($request->phone != ("attribute1" || "attribute2" || "attribute3" || "attribute4" || "attribute5" || "attribute6" || "attribute7")){
+            Session::flash('error','Edit Fail');
+            return redirect()->route('message_view');
+        }
+        $date = $request->date;
+        $time = $request->time;
+
+        $mergeTime = $date . ' ' . $time;
+
+        $message = Message::find($request->meesage_id);
+        if ($message == null || Auth::id() != $message->user_id) {
+            Session::flash('error','Edit Fail');
+            return redirect()->route('message_view');
+        }
+        $message->message = $request->message;
+        $message->blaster_id = $request->blaster_id;
+        $message->send_time = $mergeTime;
+        $message->phone = $request->phone;
+        $message->save();
+
+
+        return redirect()->route('message_view');
     }
     public function delete($id)
     {
@@ -66,12 +120,15 @@ class MessageController extends Controller
         //recovery the data
         // dd($deleteBlasting->restore());
 
-        $messagelist = Message::find($id);
+        $message = Message::find($id);
 
         //validation
-        if (Auth::id() == $messagelist->user_id) {
-            $messagelist->delete(); //soft delete
+        if ($message == null || Auth::id() != $message->user_id) {
+            Session::flash('error','Delete Fail');
+            return redirect()->route('message_view');
         }
+
+        $message->delete(); //soft delete
 
         return redirect()
             ->route('message_view')

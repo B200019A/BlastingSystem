@@ -12,6 +12,7 @@
         @CSRF
 
         <div class="form-group">
+            <input type="hidden" name="meesage_id" value={{ isset($message->id) ? $message->id:null}}>
             <select name="blaster_id" id="blaster_id" class="form-control">
                 @foreach ($blasters as $blaster)
                     @if (isset($message->blaster_id) == $blaster->id)
@@ -53,7 +54,7 @@
             </select>
             <br>
             <label for="date">Date</label>
-            <input class="form-control" type="date" id="date" name="date"
+            <input class="form-control" type="date" id="date" name="date" min=""
                 value="{{ isset($message->send_time) ? $carbon::parse($message->send_time)->format('Y-m-d') : null }}">
             @error('date')
                 <span class="invalid-message" style="color:red;" role="alert">
@@ -69,11 +70,30 @@
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
-
         </div>
 
 
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="submit" class="btn btn-primary">{{isset($message) ? "Edit":"Create" }} </button>
         </form>
         <div>
+            <script>
+                var dateRange = document.querySelector("#date");
+                var date_now = new Date().getTime();
+                var date_now = new Date(date_now);
+
+                to_YY_MM_DD = function(date) {
+
+                    let year = date.getFullYear();
+                    let month = date.getMonth() + 1;
+                    let day = date.getDate();
+
+                    month = (month < 10) ? '0' + month : month;
+                    day = (day < 10) ? '0' + day : day;
+                    return year + '-' + month + '-' + day;
+                }
+
+                var min = to_YY_MM_DD(date_now);
+
+                dateRange.setAttribute("min", min);
+            </script>
         @endsection
