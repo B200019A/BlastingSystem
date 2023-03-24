@@ -33,15 +33,22 @@
                 [attribute1],[attribute2],[attribute3],[attribute4],[attribute5],[attribute6],[attribute7] (<small>You
                     can copy the attribute apply to your message</small>)</p>
             <select name="phone" id="phone" class="form-control">
-                @if(isset($message))
+                @if (isset($message))
+                    <option value="attribute1" {{ $message->phone == 'attribute1' ? 'selected' : '' }}>Attribute1</option>
+                    <option value="attribute2" {{ $message->phone == 'attribute2' ? 'selected' : '' }}>Attribute2</option>
+                    <option value="attribute3" {{ $message->phone == 'attribute3' ? 'selected' : '' }}>Attribute3</option>
+                    <option value="attribute4" {{ $message->phone == 'attribute4' ? 'selected' : '' }}>Attribute4</option>
+                    <option value="attribute5" {{ $message->phone == 'attribute5' ? 'selected' : '' }}>Attribute5</option>
+                    <option value="attribute6" {{ $message->phone == 'attribute6' ? 'selected' : '' }}>Attribute6</option>
+                    <option value="attribute7" {{ $message->phone == 'attribute7' ? 'selected' : '' }}>Attribute7</option>
                 @else
-                <option value="attribute1" selected>Attribute1</option>
-                <option value="attribute2">Attribute2</option>
-                <option value="attribute3">Attribute3</option>
-                <option value="attribute4">Attribute4</option>
-                <option value="attribute5">Attribute5</option>
-                <option value="attribute6">Attribute6</option>
-                <option value="attribute7">Attribute7</option>
+                    <option value="attribute1">Attribute1</option>
+                    <option value="attribute2">Attribute2</option>
+                    <option value="attribute3">Attribute3</option>
+                    <option value="attribute4">Attribute4</option>
+                    <option value="attribute5">Attribute5</option>
+                    <option value="attribute6">Attribute6</option>
+                    <option value="attribute7">Attribute7</option>
                 @endif
             </select>
             <br>
