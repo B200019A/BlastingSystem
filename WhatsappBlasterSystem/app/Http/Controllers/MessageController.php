@@ -34,7 +34,7 @@ class MessageController extends Controller
         ]);
 
         //checking
-        $blaster = Blaster::where('id',$request->blaster_id);
+        $blaster = Blaster::where('id',$request->blaster_id)->first();
         if($blaster->user_id != Auth::id()){
 
             Session::flash('error','Edit Fail');
@@ -53,7 +53,7 @@ class MessageController extends Controller
         $message = Message::create([
             'user_id' => Auth::id(),
             'message' => $request->message,
-            'blastinglist_id' => $request->blaster_id,
+            'blaster_id' => $request->blaster_id,
             'send_time' => $mergeTime,
             'status' => 'Available',
             'phone' => $request->phone,
