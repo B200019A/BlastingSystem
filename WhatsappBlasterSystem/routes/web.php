@@ -23,18 +23,17 @@ Route::get('/sidebar', function () {
 
 Route::get('test', function () {
     $currentTime = Carbon\Carbon::now()->format('Y-m-d H:i');
-    $messages = \App\Models\Message::find(1);
+    $messages = \App\Models\Message::all();
     $message = $messages;
-    // foreach ($messages as $message) {
+    foreach ($messages as $message) {
         //replace the second
         $sendTime = Carbon\Carbon::parse($message->send_time)->format('Y-m-d H:i');
 
         //orignal text
-
+        $oriText = $message->message;
 
         if ($currentTime == $currentTime) {
             foreach ($message->blasters->customers as $customers) {
-                $oriText = $message->message;
                 //replace attribute text in messge
                 $oriText = str_replace('[attribute1]', $customers->attribute1, $oriText);
                 $oriText = str_replace('[attribute2]', $customers->attribute2, $oriText);
@@ -43,7 +42,6 @@ Route::get('test', function () {
                 $oriText = str_replace('[attribute5]', $customers->attribute5, $oriText);
                 $oriText = str_replace('[attribute6]', $customers->attribute6, $oriText);
                 $oriText = str_replace('[attribute7]', $customers->attribute7, $oriText);
-
 
                 //store send message table
                 $send_messages = \App\Models\SendMessage::create([
@@ -77,7 +75,7 @@ Route::get('test', function () {
             }
             $message->delete();
         }
-    // }
+    }
 });
 
 Auth::routes();
