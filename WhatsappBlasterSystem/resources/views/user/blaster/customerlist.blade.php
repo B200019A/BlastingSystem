@@ -11,6 +11,7 @@
         <div>
             <form class="row g-3" method="POST" action="{{route('customer_delete')}}">
             <input type="hidden" id="customer_id" name="customer_id" >
+            <input type="hidden" id="del_blaster_id" name="del_blaster_id" value="{{$blaster->id}}" >
             @csrf
         </div>
         <div class="modal-footer">
@@ -32,7 +33,8 @@
         <div class="modal-body">
             <form class="row g-3" method="POST" action="{{route('customer_edit')}}">
             @csrf
-            <input class="form-control" type="text" id="cust_id" name="cust_id" >
+            <input type="hidden" id="edit_blaster_id" name="edit_blaster_id" value="{{$blaster->id}}" >
+            <input class="form-control" type="hidden" id="cust_id" name="cust_id" >
             <label for="attribute1">Attribute1</label>
             <input class="form-control" type="text" id="attribute1" name="attribute1" >
             <label for="attribute2">Attribute2</label>
