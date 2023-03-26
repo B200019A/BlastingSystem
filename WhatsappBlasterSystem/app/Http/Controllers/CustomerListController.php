@@ -43,7 +43,7 @@ class CustomerListController extends Controller
             'attribute7' => $request->attribute7,
         ]);
         return redirect()
-                ->route('blaster_view_customer',$request->blaster_id)
+                ->route('blaster_view')
                 ->with('messages', 'added successfully!');
     }
 
@@ -61,7 +61,7 @@ class CustomerListController extends Controller
         $customer->attribute7 = $request->attribute7;
         $customer->save();
         return redirect()
-                ->route('blaster_view_customer',$request->edit_blaster_id)
+                ->route('blaster_view')
                 ->with('messages', 'edit successfully!');
     }
 
@@ -71,7 +71,7 @@ class CustomerListController extends Controller
         $customer->delete();
         
         return redirect()
-                ->route('blaster_view_customer',$request->del_blaster_id)
+                ->route('blaster_view')
                 ->with('messages', 'delete successfully!');
     }
 
