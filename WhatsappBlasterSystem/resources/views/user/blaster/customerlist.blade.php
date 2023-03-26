@@ -1,5 +1,97 @@
 @extends('layouts.app')
 @section('content')
+ <!-- Delete Modal -->
+ <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="deleteModalLabel">Are you sure to delete?</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div>
+            <form class="row g-3" method="POST" action="{{route('customer_delete')}}">
+            <input type="hidden" id="customer_id" name="customer_id" >
+            @csrf
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+            </form>
+      </div>
+    </div>
+</div>
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="editModalLabel">Edit Customer</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="row g-3" method="POST" action="{{route('customer_edit')}}">
+            @csrf
+            <input class="form-control" type="text" id="cust_id" name="cust_id" >
+            <label for="attribute1">Attribute1</label>
+            <input class="form-control" type="text" id="attribute1" name="attribute1" >
+            <label for="attribute2">Attribute2</label>
+            <input class="form-control" type="text" id="attribute2" name="attribute2" >
+            <label for="attribute3">Attribute3</label>
+            <input class="form-control" type="text" id="attribute3" name="attribute3" >
+            <label for="attribute4">Attribute4</label>
+            <input class="form-control" type="text" id="attribute4" name="attribute4" >
+            <label for="attribute5">Attribute5</label>
+            <input class="form-control" type="text" id="attribute5" name="attribute5" >
+            <label for="attribute6">Attribute6</label>
+            <input class="form-control" type="text" id="attribute6" name="attribute6" >
+            <label for="attribute6">Attribute7</label>
+            <input class="form-control" type="text" id="attribute7" name="attribute7" >
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Edit</button>
+        </div>
+            </form>
+      </div>
+    </div>
+</div>
+<!-- Add Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="addModalLabel">Edit Customer</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="row g-3" method="POST" action="{{route('customer_add')}}">
+            @csrf
+            <input type="hidden" id="blaster_id" name="blaster_id" value="{{$blaster->id}}" >
+            <label for="attribute1">Attribute1</label>
+            <input class="form-control" type="text" id="attribute1" name="attribute1" >
+            <label for="attribute2">Attribute2</label>
+            <input class="form-control" type="text" id="attribute2" name="attribute2" >
+            <label for="attribute3">Attribute3</label>
+            <input class="form-control" type="text" id="attribute3" name="attribute3" >
+            <label for="attribute4">Attribute4</label>
+            <input class="form-control" type="text" id="attribute4" name="attribute4" >
+            <label for="attribute5">Attribute5</label>
+            <input class="form-control" type="text" id="attribute5" name="attribute5" >
+            <label for="attribute6">Attribute6</label>
+            <input class="form-control" type="text" id="attribute6" name="attribute6" >
+            <label for="attribute7">Attribute7</label>
+            <input class="form-control" type="text" id="attribute7" name="attribute7" >
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+            </form>
+      </div>
+    </div>
+</div>
     <section class="mt-sm-5">
         <div class="container">
             <div class="row mb-sm-3">
@@ -32,6 +124,9 @@
                                         class="fa fa-upload"></i></a>
                             </div>
                         </div>
+                        <div>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal" >Add Customer</button>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-2"></div>
@@ -51,7 +146,7 @@
                                 <th>Attribute5</th>
                                 <th>Attribute6</th>
                                 <th>Attribute7</th>
-                                <th>Operate</th>
+                                <th colspan="2" style="text-align: center">Operate</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,9 +162,10 @@
                                         <td>{{ $customer->attribute6 }}</td>
                                         <td>{{ $customer->attribute7 }}</td>
                                         <td>
-                                            <a href="{{ route('blaster_delete', ['id' => $blaster->id]) }}"
-                                                onClick="return confirm('Are you sure to delete?')"
-                                                class="btn btn-danger btn-xs">Delete</a>
+                                            <button value="{{$customer}}" class="btn btn-success btnEdit">Edit</button>
+                                        </td>
+                                        <td>
+                                            <button value="{{$customer->id}}" class="btn btn-danger btnDelete">Delete</button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -86,4 +182,37 @@
 
         </div>
     </section>
+
+
 @endsection
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<script>
+//for using bootstrap js need to use '$(document).ready(function (){' and above src to call
+    $(document).ready(function (){
+        //id should be unique so instead of using id it is better to use class
+        $('.btnDelete').click(function(){
+            // var user_id = {{$blaster->user_id}};
+            // alert(user_id);
+            var customer_id = $(this).val();
+            $('#customer_id').val(customer_id);
+            $('#deleteModal').modal('show');
+        });
+        //edit button
+        $('.btnEdit').click(function(){
+            var customer = $(this).val();
+            var myCustomer = JSON.parse(customer);
+            var customer_id = myCustomer.id;
+            // alert(customer_id);
+            $('#cust_id').val(customer_id);
+            $('#attribute1').val(myCustomer.attribute1);
+            $('#attribute2').val(myCustomer.attribute2);
+            $('#attribute3').val(myCustomer.attribute3);
+            $('#attribute4').val(myCustomer.attribute4);
+            $('#attribute5').val(myCustomer.attribute5);
+            $('#attribute6').val(myCustomer.attribute6);
+            $('#attribute7').val(myCustomer.attribute7);
+            $('#editModal').modal('show');
+        });
+    });
+
+</script>

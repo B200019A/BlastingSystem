@@ -44,7 +44,12 @@ Route::get('test', function(){
         }
     }
 });
+Route::get('test1', function(){
+    $blaster = \App\Models\Blaster::withTrashed()->findOrFail(1);
 
+    $blaster->restore();
+
+});
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -77,6 +82,12 @@ Route::prefix('user')
         Route::controller(App\Http\Controllers\CustomerListController::class)->group(function (){
             Route::get('/customer/import/{id}','import')->name('import_view');
             Route::post('/customer/import/excel','import_customer')->name('import_customer');
+            // Route::get('/customer/keyin/{id}','keyin')->name('keyin_view');
+            // Route::post('/customer/keyin/data','keyin_customer')->name('keyin_customer');
+            Route::post('/customer/add','add')->name('customer_add');
+            Route::post('/customer/edit','edit')->name('customer_edit');
+            Route::post('/customer/delete','delete')->name('customer_delete');
+            
         });
 
         Route::controller(App\Http\Controllers\MessageController::class)->group(function (){
