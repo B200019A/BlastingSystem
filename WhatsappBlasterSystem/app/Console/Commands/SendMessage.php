@@ -30,16 +30,14 @@ class SendMessage extends Command
     {
         $currentTime = Carbon::now()->format('Y-m-d H:i');
         $messages = Message::all();
-        $message = $messages;
         foreach ($messages as $message) {
             //replace the second
             $sendTime = Carbon::parse($message->send_time)->format('Y-m-d H:i');
 
-            //orignal text
-            $oriText = $message->message;
-
             if ($sendTime == $currentTime) {
                 foreach ($message->blasters->customers as $customers) {
+                    //orignal text
+                    $oriText = $message->message;
                     //replace attribute text in messge
                     $oriText = str_replace('[attribute1]', $customers->attribute1, $oriText);
                     $oriText = str_replace('[attribute2]', $customers->attribute2, $oriText);
