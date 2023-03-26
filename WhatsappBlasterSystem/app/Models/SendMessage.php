@@ -8,11 +8,11 @@ use App\Models\Message;
 use App\Models\Blaster;
 use App\Models\Customer;
 
-class SendMesasage extends Model
+class SendMessage extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['message_id','blaster_id','customer_id','full_message'];
+    protected $fillable = ['message_id','blaster_id','customer_id','full_message','phone'];
 
     public function messages()
     {
@@ -27,5 +27,4 @@ class SendMesasage extends Model
         return $this->hasOne(Customer::class,'id','customer_id');
 
     }
-
 }

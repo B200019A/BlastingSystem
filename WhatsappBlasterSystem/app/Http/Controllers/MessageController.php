@@ -12,7 +12,7 @@ class MessageController extends Controller
 {
     public function view()
     {
-        $data['messages'] = Message::where([['status','Available'], ['user_id',Auth::id()]])->get();
+        $data['messages'] = Message::where('user_id',Auth::id())->get();
 
         return view('user/message/index', $data);
     }
@@ -47,7 +47,6 @@ class MessageController extends Controller
 
         $date = $request->date;
         $time = $request->time;
-
         $mergeTime = $date . ' ' . $time;
 
         $message = Message::create([
@@ -55,7 +54,6 @@ class MessageController extends Controller
             'message' => $request->message,
             'blaster_id' => $request->blaster_id,
             'send_time' => $mergeTime,
-            'status' => 'Available',
             'phone' => $request->phone,
         ]);
 

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('message');
             $table->string('blaster_id');
             $table->dateTime('send_time');
-            $table->string('status');
+            $table->string('phone');
             $table->softDeletes('deleted_at');
             $table->timestamps();
         });

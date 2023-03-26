@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('send_mesasages', function (Blueprint $table) {
+        Schema::create('send_messages', function (Blueprint $table) {
             $table->id();
             $table->string("message_id");
             $table->string("blaster_id");
             $table->string("customer_id");
             $table->string("full_message");
+            $table->string('phone');
             $table->timestamp("fail_at")->nullable();
             $table->timestamp("pass_at")->nullable();
             $table->timestamps();
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('send_mesasages');
+        Schema::dropIfExists('send_messages');
     }
 };
