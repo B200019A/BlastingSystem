@@ -8,7 +8,7 @@ use App\Models\Blaster;
 use  App\Imports\CustomerImport;
 use Maatwebsite\Excel\Facades\Excel;
 
-class CustomerListController extends Controller
+class CustomerController extends Controller
 {
     //excel import page
     public function import($id){
@@ -69,7 +69,7 @@ class CustomerListController extends Controller
     public function delete(Request $request){
         $customer = Customer::find($request->input('customer_id'));
         $customer->delete();
-        
+
         return redirect()
                 ->route('blaster_view')
                 ->with('messages', 'delete successfully!');

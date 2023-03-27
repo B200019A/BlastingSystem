@@ -7,7 +7,7 @@ use App\Models\Blaster;
 use App\Models\Customer;
 use Auth;
 use Session;
-class BlastingController extends Controller
+class BlasterController extends Controller
 {
     public function view()
     {

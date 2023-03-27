@@ -98,7 +98,7 @@ Route::prefix('user')
             Route::post('/profile/update', 'profileUpdate')->name('profile_update');
         });
 
-        Route::controller(App\Http\Controllers\BlastingController::class)->group(function (){
+        Route::controller(App\Http\Controllers\BlasterController::class)->group(function (){
             Route::get('/blaster/index','view')->name('blaster_view');
             Route::get('/blaster/add/view','add_view')->name('blaster_add_view');
             Route::post('/blaster/add','add')->name('blaster_add');
@@ -107,7 +107,7 @@ Route::prefix('user')
             Route::get('/blaster/delete/{id}','delete')->name('blaster_delete');
         });
 
-        Route::controller(App\Http\Controllers\CustomerListController::class)->group(function (){
+        Route::controller(App\Http\Controllers\CustomerController::class)->group(function (){
             Route::get('/customer/import/{id}','import')->name('import_view');
             Route::post('/customer/import/excel','import_customer')->name('import_customer');
             // Route::get('/customer/keyin/{id}','keyin')->name('keyin_view');
