@@ -108,7 +108,7 @@ Route::prefix('user')
         });
 
         Route::controller(App\Http\Controllers\CustomerController::class)->group(function (){
-            Route::get('/customer/import/{id}','import')->name('import_view');
+            Route::get('/customer/import/{id}/{existed}','import')->name('import_view');
             Route::post('/customer/import/excel','import_customer')->name('import_customer');
             // Route::get('/customer/keyin/{id}','keyin')->name('keyin_view');
             // Route::post('/customer/keyin/data','keyin_customer')->name('keyin_customer');

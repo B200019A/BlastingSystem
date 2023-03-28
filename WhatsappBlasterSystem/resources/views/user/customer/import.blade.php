@@ -6,6 +6,7 @@
             @csrf
         <input type="file" class="form-control" name="customer_excel">
         <input type="hidden" name="blaster_id" value='{{$blaster_id}}'> 
+        <input type="hidden" name="current_existed" value='{{$current_existed}}'> 
         <button type="submit" class="btn btn-primary">Upload</button>
         @error('customer_excel')
             <span class="text-danger">{{str_replace(", txt","",$message)}}</span>

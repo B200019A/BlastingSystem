@@ -119,8 +119,9 @@
                             <h5 style="padding-top:6px; padding-right:5px;">Import: </h5>
                             <div class="custom-file">
                             </div>
+                            <input type="hidden" value="{{$blaster->customers->count()}}" >
                             <div class="input-group-append">
-                                <a class="btn btn-outline-secondary"  href="{{ route('import_view', ['id' => $blaster->id]) }}"><i
+                                <a class="btn btn-outline-secondary"  href="{{ route('import_view', ['id' => $blaster->id,'existed' => $blaster->customers->count()]) }}"><i
                                         class="fa fa-upload"></i></a>
                             </div>
                         </div>

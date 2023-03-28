@@ -6,8 +6,11 @@ use App\Models\Customer;
 use Attribute;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use Maatwebsite\Excel\Concerns\WithLimit;
+
 use Auth;
-class CustomerImport implements ToModel, WithHeadingRow
+class CustomerImport implements ToModel, WithHeadingRow, SkipsEmptyRows, WithLimit
 {
     /**
     * @param array $row
@@ -16,9 +19,11 @@ class CustomerImport implements ToModel, WithHeadingRow
     */
 
     private $blaster_id;
-    public function __construct($blaster_id)
+    private $current_existed;
+    public function __construct($blaster_id,$current_existed)
     {
         $this->blaster_id = $blaster_id;
+        $this->current_existed = $current_existed;
     }
 
     public function model(array $row)
@@ -34,5 +39,9 @@ class CustomerImport implements ToModel, WithHeadingRow
             'attribute6' => $row['attribute6'],
             'attribute7' => $row['attribute7']
         ]);
+    }
+
+    public function limit(): int{
+        return 301 - $this->current_existed;
     }
 }

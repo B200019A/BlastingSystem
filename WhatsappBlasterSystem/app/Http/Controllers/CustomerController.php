@@ -11,11 +11,11 @@ use Maatwebsite\Excel\Facades\Excel;
 class CustomerController extends Controller
 {
     //excel import page
-    public function import($id){
+    public function import($id,$existed){
 
         //validate
         $data['blaster_id'] = $id;
-
+        $data['current_existed'] = $existed;
         return view('user/customer/import',$data);
     }
 
@@ -25,7 +25,7 @@ class CustomerController extends Controller
             'customer_excel'=>'required|mimes:xlsx,csv,txt'
         ]);
 
-        Excel::import(new CustomerImport($request->input('blaster_id')),$request->file('customer_excel'));
+        Excel::import(new CustomerImport($request->input('blaster_id'),$request->input('current_existed')),$request->file('customer_excel'));
 
         return redirect()->route('blaster_view');
     }
