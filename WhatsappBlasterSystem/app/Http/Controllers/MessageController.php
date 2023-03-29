@@ -133,4 +133,14 @@ class MessageController extends Controller
             ->route('message_view')
             ->with('messages', 'delete successfully!');
     }
+
+    public function history_view(){
+
+        $data['messages'] = Message::onlyTrashed()->where('user_id',Auth::id())->get();
+        if($data['messages']->count() == null){
+            $data['messages'] = "history_null";
+        }
+        return view('user/message/index', $data);
+
+    }
 }

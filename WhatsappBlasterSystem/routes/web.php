@@ -67,6 +67,7 @@ Route::prefix('user')
             Route::get('/meesage/edit/{id}', 'edit')->name('message_edit_view');
             Route::post('/meesage/update', 'update')->name('message_update');
             Route::get('/meesage/delete/{id}', 'delete')->name('message_delete');
+            Route::get('/meesage/history', 'history_view')->name('message_history_view');
         });
 
         // Route::apiResources([

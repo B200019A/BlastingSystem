@@ -96,7 +96,7 @@
                                         <a class="dropdown-item" href="{{ route('message_add_view') }}">Add Message
                                             </a>
                                         <a class="dropdown-item" href="{{ route('message_view') }}">View Message</a>
-                                        <a class="dropdown-item" href="">View History</a>
+                                        <a class="dropdown-item" href="{{ route('message_history_view') }}">View History</a>
                                     </div>
                                 </li>
                             @endif
