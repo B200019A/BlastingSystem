@@ -32,7 +32,7 @@
         <div class="modal-body">
             <form class="row g-3" method="POST" action="{{route('customer_edit')}}">
             @csrf
-            <input class="form-control" type="text" id="cust_id" name="cust_id" >
+            <input class="form-control" type="hidden" id="cust_id" name="cust_id" >
             <label for="attribute1">Attribute1</label>
             <input class="form-control" type="text" id="attribute1" name="attribute1" >
             <label for="attribute2">Attribute2</label>
