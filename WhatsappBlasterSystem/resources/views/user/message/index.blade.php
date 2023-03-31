@@ -39,7 +39,7 @@
                                                 class="btn btn-danger btn-xs">Delete</a>
                                         </td>
                                         @else
-                                           <td> <a href=""
+                                           <td> <a href="{{ route('history_customer_view', ['id' => $message->id]) }}"
                                                 class="btn btn-primary btn-xs">View</a></td>
                                         @endif
                                     </tr>

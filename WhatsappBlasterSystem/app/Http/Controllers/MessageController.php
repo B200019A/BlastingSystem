@@ -5,14 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Blaster;
 use App\Models\Message;
-use App\Models\Customer;
+use App\Models\OnsendApi;
+use App\Models\SendMessage;
 use Auth;
 use Session;
+use Carbon\Carbon;
+use Illuminate\Support\Arr;
+
 class MessageController extends Controller
 {
     public function view()
     {
-        $data['messages'] = Message::where('user_id',Auth::id())->get();
+        $data['messages'] = Message::where('user_id', Auth::id())->get();
 
         return view('user/message/index', $data);
     }
@@ -34,14 +38,13 @@ class MessageController extends Controller
         ]);
 
         //checking
-        $blaster = Blaster::where('id',$request->blaster_id)->first();
-        if($blaster->user_id != Auth::id()){
-
-            Session::flash('error','Edit Fail');
+        $blaster = Blaster::where('id', $request->blaster_id)->first();
+        if ($blaster->user_id != Auth::id()) {
+            Session::flash('error', 'Edit Fail');
             return redirect()->route('message_view');
         }
-        if($request->phone != ("attribute1" || "attribute2" || "attribute3" || "attribute4" || "attribute5" || "attribute6" || "attribute7")){
-            Session::flash('error','Edit Fail');
+        if ($request->phone != ('attribute1' || 'attribute2' || 'attribute3' || 'attribute4' || 'attribute5' || 'attribute6' || 'attribute7')) {
+            Session::flash('error', 'Edit Fail');
             return redirect()->route('message_view');
         }
 
@@ -62,11 +65,10 @@ class MessageController extends Controller
     }
     public function edit($id)
     {
-
         $message = Message::where('id', $id)->first();
 
-        if($message == null || $message->user_id != Auth::id()){
-            Session::flash('error','Edit Fail');
+        if ($message == null || $message->user_id != Auth::id()) {
+            Session::flash('error', 'Edit Fail');
             return redirect()->route('message_view');
         }
         $blasters = Blaster::where('user_id', Auth::id())->get();
@@ -75,7 +77,6 @@ class MessageController extends Controller
     }
     public function update(Request $request)
     {
-
         $validated = $request->validate([
             'message' => 'required|string',
             'date' => 'required|string',
@@ -84,13 +85,13 @@ class MessageController extends Controller
         ]);
 
         //checking
-        $blaster = Blaster::where('id',$request->blaster_id)->first();
-        if($blaster->user_id != Auth::id()){
-            Session::flash('error','Edit Fail');
+        $blaster = Blaster::where('id', $request->blaster_id)->first();
+        if ($blaster->user_id != Auth::id()) {
+            Session::flash('error', 'Edit Fail');
             return redirect()->route('message_view');
         }
-        if($request->phone != ("attribute1" || "attribute2" || "attribute3" || "attribute4" || "attribute5" || "attribute6" || "attribute7")){
-            Session::flash('error','Edit Fail');
+        if ($request->phone != ('attribute1' || 'attribute2' || 'attribute3' || 'attribute4' || 'attribute5' || 'attribute6' || 'attribute7')) {
+            Session::flash('error', 'Edit Fail');
             return redirect()->route('message_view');
         }
         $date = $request->date;
@@ -100,7 +101,7 @@ class MessageController extends Controller
 
         $message = Message::find($request->meesage_id);
         if ($message == null || Auth::id() != $message->user_id) {
-            Session::flash('error','Edit Fail');
+            Session::flash('error', 'Edit Fail');
             return redirect()->route('message_view');
         }
         $message->message = $request->message;
@@ -108,7 +109,6 @@ class MessageController extends Controller
         $message->send_time = $mergeTime;
         $message->phone = $request->phone;
         $message->save();
-
 
         return redirect()->route('message_view');
     }
@@ -123,7 +123,7 @@ class MessageController extends Controller
 
         //validation
         if ($message == null || Auth::id() != $message->user_id) {
-            Session::flash('error','Delete Fail');
+            Session::flash('error', 'Delete Fail');
             return redirect()->route('message_view');
         }
 
@@ -134,13 +134,69 @@ class MessageController extends Controller
             ->with('messages', 'delete successfully!');
     }
 
-    public function history_view(){
-
-        $data['messages'] = Message::onlyTrashed()->where('user_id',Auth::id())->get();
-        if($data['messages']->count() == null){
-            $data['messages'] = "history_null";
+    public function history_view()
+    {
+        $data['messages'] = Message::onlyTrashed()
+            ->where('user_id', Auth::id())
+            ->get();
+        if ($data['messages']->count() == null) {
+            $data['messages'] = 'history_null';
         }
         return view('user/message/index', $data);
+    }
 
+    public function history_customer($id)
+    {
+        //checking
+        $message = Message::onlyTrashed()
+            ->where('id', $id)
+            ->first();
+        if ($message->user_id != Auth::id()) {
+            return back();
+        }
+        $data['customersMessages'] = SendMessage::where('message_id', $id)->get();
+
+        return view('user/message/history_customer', $data);
+    }
+
+    public function resend($id)
+    {
+        $sendMessage = SendMessage::where('id', $id)->first();
+
+        //send message to customer
+        $api = OnsendApi::where('user_id', Auth::id())->first();
+        $apiKey = $api->api;
+
+        //get attribute
+        $attribute = $sendMessage->phone;
+        //get phone number
+        $phoneNumber = $sendMessage->customers->$attribute;
+        $data = [
+            'phone_number' => $phoneNumber,
+            'message' => $sendMessage->full_message,
+        ];
+
+        //onsend api send to targe phone number
+        $response = \Illuminate\Support\Facades\Http::accept('application/json')
+            ->withToken($apiKey)
+            ->post('https://onsend.io/api/v1/send', $data);
+
+        //check send message status
+        $response = json_decode($response, true);
+        $collection = collect($response);
+        $time = Carbon::now();
+        if (Arr::has($collection, 'errors')) {
+            $sendMessage->fail_at = $time;
+        } else {
+            if (!$collection['success']) {
+                //cannot send the target phone number
+                $sendMessage->fail_at = $time;
+            } else {
+                //successful send the phone number
+                $sendMessage->pass_at = $time;
+            }
+        }
+        $sendMessage->save();
+        return back();
     }
 }

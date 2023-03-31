@@ -53,8 +53,6 @@ Route::prefix('user')
         Route::controller(App\Http\Controllers\CustomerController::class)->group(function () {
             Route::get('/customer/import/{id}/{existed}', 'import')->name('import_view');
             Route::post('/customer/import/excel', 'import_customer')->name('import_customer');
-            // Route::get('/customer/keyin/{id}','keyin')->name('keyin_view');
-            // Route::post('/customer/keyin/data','keyin_customer')->name('keyin_customer');
             Route::post('/customer/add', 'add')->name('customer_add');
             Route::post('/customer/edit', 'edit')->name('customer_edit');
             Route::post('/customer/delete', 'delete')->name('customer_delete');
@@ -68,11 +66,9 @@ Route::prefix('user')
             Route::post('/meesage/update', 'update')->name('message_update');
             Route::get('/meesage/delete/{id}', 'delete')->name('message_delete');
             Route::get('/meesage/history', 'history_view')->name('message_history_view');
+            Route::get('/meesage/history/customer/{id}', 'history_customer')->name('history_customer_view');
+            Route::get('/meesage/resend/{id}', 'resend')->name('resend_message');
         });
-
-        // Route::apiResources([
-        //     'blasters' => BlastingController::class,
-        // ]);
     });
 
 Route::prefix('admin')

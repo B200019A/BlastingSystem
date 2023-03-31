@@ -1,15 +1,21 @@
 @extends('layouts.app')
 @section('content')
-    <div class="container col-sm-12   mt-3">
-        <h3>Create new list</h3>
-        <form action="{{ route('blaster_add') }}" method="POST" enctype="multipart/form-data">
-            @CSRF
+    <div class="container">
+        <div class="row">
+            <div class="col col-12 col-md-3"></div>
+            <div class="col col-12 col-md-6 mt-md-5 border p-2 p-md-5 rounded-5 form-background">
+                <h2 class="text-center mb-5">Create new list</h2>
+                <form action="{{ route('blaster_add') }}" method="POST" enctype="multipart/form-data">
+                    @CSRF
 
-            <div class="form-group">
-                <label for="blaster_name">Name</label>
-                <input class="form-control" type="text" id="w" name="blaster_name" required>
+                    <div class="form-group">
+                        <label for="blaster_name">Name</label>
+                        <input class="form-control" type="text" id="w" name="blaster_name" required>
+                    </div>
+                     <br>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
             </div>
-            <button type="submit" class="btn btn-primary">Create</button>
-        </form>
-        <div>
+        </div>
+    </div>
 @endsection

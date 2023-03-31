@@ -27,7 +27,7 @@ class CustomerController extends Controller
 
         Excel::import(new CustomerImport($request->input('blaster_id'),$request->input('current_existed')),$request->file('customer_excel'));
 
-        return redirect()->route('blaster_view');
+        return redirect()->route('blaster_view_customer',$request->input('blaster_id'));//return to the customer list
     }
 
     public function add(Request $request)
@@ -42,9 +42,7 @@ class CustomerController extends Controller
             'attribute6' => $request->attribute6,
             'attribute7' => $request->attribute7,
         ]);
-        return redirect()
-                ->route('blaster_view')
-                ->with('messages', 'added successfully!');
+        return back();
     }
 
 
@@ -60,9 +58,7 @@ class CustomerController extends Controller
         $customer->attribute6 = $request->attribute6;
         $customer->attribute7 = $request->attribute7;
         $customer->save();
-        return redirect()
-                ->route('blaster_view')
-                ->with('messages', 'edit successfully!');
+        return back();
     }
 
 
@@ -70,14 +66,6 @@ class CustomerController extends Controller
         $customer = Customer::find($request->input('customer_id'));
         $customer->delete();
 
-        return redirect()
-                ->route('blaster_view')
-                ->with('messages', 'delete successfully!');
+        return back();
     }
-
-    // //user keyin page
-    // public function keyin($id){
-    //     $data['blaster_id'] = $id;
-    //     return view('user/customer/keyin',$data);
-    // }
 }
