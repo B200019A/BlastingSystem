@@ -31,8 +31,7 @@
                         @endforeach
                     </select>
                     <label for="message">message</label>
-                    <input class="form-control" type="text" id="message" name="message"
-                        value="{{ $message->message ?? null }}">
+                     <textarea  class="form-control" id="message" name="message" rows="4" cols="50">{{ $message->message ?? null }}</textarea>
                     @error('message')
                         <span class="invalid-message" style="color:red;" role="alert">
                             <strong>{{ $message }}</strong>
