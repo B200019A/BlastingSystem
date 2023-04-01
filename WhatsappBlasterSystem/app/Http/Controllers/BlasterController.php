@@ -23,9 +23,15 @@ class BlasterController extends Controller
 
     public function add(Request $request)
     {
+        $image = $request->file('blaster_image');
+        $destinationPath = 'images';
+        $image->move(public_path($destinationPath), $image->getClientOriginalName()); //images is the location
+        $imageName = $image->getClientOriginalName();
+
         $blasting = Blaster::create([
             'user_id' => Auth::id(),
             'name' => $request->blaster_name,
+            'image' => $imageName,
         ]);
         return redirect()->route('blaster_view');
     }
@@ -60,7 +66,13 @@ class BlasterController extends Controller
 
 
     }
-
+    public function edit($id){
+        $data['blaster'] = Blaster::where([['id',$id],['user_id',Auth::id()]])->first();
+        if( $data['blaster'] == null){
+            return back();
+        }
+        return view('user/blaster/add',$data);
+    }
     public function update(Request $request){
 
         $blaster = Blaster::find($request->blaster_id);
@@ -70,9 +82,16 @@ class BlasterController extends Controller
             Session::flash('error','Edit Fail');
             return redirect()->route('blaster_view');
         }
+
+        if ($request->file('blaster_image') != '' && $blaster->image != $request->file('blaster_image')->getClientOriginalName()) {
+            $image = $request->file('blaster_image');
+            $destinationPath = 'images';
+            $image->move(public_path($destinationPath), $image->getClientOriginalName()); //images is the location
+            $imageName = $image->getClientOriginalName();
+            $blaster->image = $imageName;
+        }
         $blaster->name = $request->blaster_name;
         $blaster->save();
-        Session::flash('success','Edit name successfully');
 
         return redirect()->route('blaster_view_customer',$blaster->id);
 

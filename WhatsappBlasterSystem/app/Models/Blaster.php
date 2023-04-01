@@ -10,7 +10,7 @@ use App\Models\Message;
 class Blaster extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['user_id','name'];
+    protected $fillable = ['user_id','name','image'];
 
     protected $table = 'blasters';
 

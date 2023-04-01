@@ -86,7 +86,7 @@
                         </span>
                     @enderror
                     <br>
-                    <button type="submit" class="btn btn-primary">{{ isset($message) ? 'Edit' : 'Create' }} </button>
+                    <button type="submit" class="btn btn-primary">{{ isset($message) ? 'Update' : 'Create' }} </button>
                 </div>
                 </form>
             </div>

@@ -92,6 +92,21 @@
             </div>
         </div>
     </div>
+    <!-- Image Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Blaster Image</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img alt="" class="img-fluid image">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <section class="mt-sm-5">
         <div class="container">
             <div class="row">
@@ -100,21 +115,23 @@
                         <h1 class="text-center mb-md-3 mt-md-3">Customer List</h1>
                     </div>
                     <div class="p-4">
-                        <form action="{{ route('blaster_update') }}" method="POST" enctype="multipart/form-data">
-                            @CSRF
-                            <div class="input-group mb-3">
-                                <input type="hidden" value="{{ $blaster->id }}" name="blaster_id">
-                                <h5 style="padding-top:6px; padding-right:5px;">Blaster Name: </h5>
-                                <div class="custom-file">
-                                    <input class="form-control" type="text" id="blaster_name" name="blaster_name"
-                                        value="{{ $blaster->name }}">
-                                </div>
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" height="23px" type="submit"><i
-                                            class="fa fa-edit"></i>Edit</button>
-                                </div>
+                        <div class="input-group mb-3">
+                            <input type="hidden" value="{{ $blaster->id }}" name="blaster_id">
+                            <h5 style="padding-top:6px; padding-right:5px;">Blaster Name: </h5>
+                            <h5 style="padding-top:6px; padding-right:5px;">{{ $blaster->name }}</h5>
+                            <div class="input-group-append">
+                                <a href="{{ route('blaster_edit', ['id' => $blaster->id]) }}"
+                                    class="btn btn-outline-secondary" height="23px" type="submit"><i
+                                        class="fa fa-edit"></i>Edit</a>
                             </div>
-                        </form>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="hidden" value="{{ $blaster->id }}" name="blaster_id">
+                            <h5 style="padding-top:6px; padding-right:5px;">Image: </h5>
+                            <h5 style="padding-top:6px; padding-right:5px;"><a class="viewImage" data-toggle="modal"
+                                    data-id="{{ asset('images') }}/{{ $blaster->image }}"
+                                    data-target="#imageModal">{{ $blaster->image }}</a></h5>
+                        </div>
                         @CSRF
                         <div class="input-group mb-3">
                             <h5 style="padding-top:6px; padding-right:5px;">Import: </h5>
@@ -157,7 +174,7 @@
                                     @foreach ($blaster->customers as $key => $customer)
                                         <tr>
                                             <th>{{ $key + 1 }}</th>
-                                             <td>{{ $customer->id }}</td>
+                                            <td>{{ $customer->id }}</td>
                                             <td>{{ $customer->attribute1 }}</td>
                                             <td>{{ $customer->attribute2 }}</td>
                                             <td>{{ $customer->attribute3 }}</td>
@@ -177,7 +194,7 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="8" class="text-center">Add Customer List now!</td>
+                                        <td colspan="10" class="text-center">Add Customer List now!</td>
                                     </tr>
                                 @endif
                             </tbody>
@@ -217,6 +234,14 @@
             $('#attribute6').val(myCustomer.attribute6);
             $('#attribute7').val(myCustomer.attribute7);
             $('#editModal').modal('show');
+        });
+        //view blaster image
+        $('.viewImage').click(function() {
+
+            var image = $(this).data('id');
+            console.log(image);
+            $('.image').attr('src', image);
+            $('#imageModal').modal('show');
         });
     });
 </script>

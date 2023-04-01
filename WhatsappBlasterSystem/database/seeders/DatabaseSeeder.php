@@ -53,10 +53,12 @@ class DatabaseSeeder extends Seeder
         Blaster::create([
             'user_id' => '2',
             'name' => 'Test1',
+            'image' => 'test.png',
         ]);
         Blaster::create([
             'user_id' => '2',
             'name' => 'Test2',
+            'image' => 'test.png',
         ]);
 
         //default customer

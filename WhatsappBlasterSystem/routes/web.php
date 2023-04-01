@@ -46,6 +46,7 @@ Route::prefix('user')
             Route::get('/blaster/add/view', 'add_view')->name('blaster_add_view');
             Route::post('/blaster/add', 'add')->name('blaster_add');
             Route::get('/blaster/view/customer/{id}', 'viewCustomer')->name('blaster_view_customer');
+            Route::get('/blaster/edit/{id}', 'edit')->name('blaster_edit');
             Route::post('/blaster/update', 'update')->name('blaster_update');
             Route::get('/blaster/delete/{id}', 'delete')->name('blaster_delete');
         });
