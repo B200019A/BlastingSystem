@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('user_id');
             $table->string('name');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->softDeletes('deleted_at');
             $table->timestamps();
         });

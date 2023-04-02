@@ -23,15 +23,18 @@ class BlasterController extends Controller
 
     public function add(Request $request)
     {
-        $image = $request->file('blaster_image');
-        $destinationPath = 'images';
-        $image->move(public_path($destinationPath), $image->getClientOriginalName()); //images is the location
-        $imageName = $image->getClientOriginalName();
+        $image = $request->file('blaster_image') ? $request->file('blaster_image') : null;
+        $imageName = null;
+        if ($image) {
+            $destinationPath = 'images';
+            $image->move(public_path($destinationPath), $image->getClientOriginalName()); //images is the location
+            $imageName = $image->getClientOriginalName();
+        }
 
         $blasting = Blaster::create([
             'user_id' => Auth::id(),
             'name' => $request->blaster_name,
-            'image' => $imageName,
+            'image' => $imageName ? $imageName : null,
         ]);
         return redirect()->route('blaster_view');
     }
@@ -55,31 +58,30 @@ class BlasterController extends Controller
     }
     public function viewCustomer($id)
     {
-        $data['blaster'] = Blaster::where([['id',$id], ['user_id',Auth::id()]])->first();
+        $data['blaster'] = Blaster::where([['id', $id], ['user_id', Auth::id()]])->first();
 
         //validate
-        if(isset($data['blaster'])){
+        if (isset($data['blaster'])) {
             return view('user/blaster/customerlist', $data);
         }
 
         return redirect()->route('blaster_view');
-
-
     }
-    public function edit($id){
-        $data['blaster'] = Blaster::where([['id',$id],['user_id',Auth::id()]])->first();
-        if( $data['blaster'] == null){
+    public function edit($id)
+    {
+        $data['blaster'] = Blaster::where([['id', $id], ['user_id', Auth::id()]])->first();
+        if ($data['blaster'] == null) {
             return back();
         }
-        return view('user/blaster/add',$data);
+        return view('user/blaster/add', $data);
     }
-    public function update(Request $request){
-
+    public function update(Request $request)
+    {
         $blaster = Blaster::find($request->blaster_id);
 
         //validation
         if (Auth::id() != $blaster->user_id) {
-            Session::flash('error','Edit Fail');
+            Session::flash('error', 'Edit Fail');
             return redirect()->route('blaster_view');
         }
 
@@ -93,7 +95,6 @@ class BlasterController extends Controller
         $blaster->name = $request->blaster_name;
         $blaster->save();
 
-        return redirect()->route('blaster_view_customer',$blaster->id);
-
+        return redirect()->route('blaster_view_customer', $blaster->id);
     }
 }

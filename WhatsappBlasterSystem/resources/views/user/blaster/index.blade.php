@@ -23,9 +23,13 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $blaster->name }} </td>
+                                        @if(isset($blaster->image))
                                         <td><a class="viewImage" data-toggle="modal"
                                                 data-id="{{ asset('images') }}/{{ $blaster->image }}"
                                                 data-target="#imageModal">{{ $blaster->image }}</a></td>
+                                        @else
+                                        <td>None</td>
+                                        @endif
                                         <td> {{ $blaster->customers->count() }}</td>
                                         <td><a href="{{ route('blaster_view_customer', ['id' => $blaster->id]) }}"
                                                 class="btn btn-primary btn-xs">view customer</a>
