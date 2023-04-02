@@ -99,7 +99,7 @@ class DatabaseSeeder extends Seeder
             'message' => 'Hi,[attribute1], your adrress is [attribute3], you road tax will be expire at [attribute4].',
             'blaster_id' => '1',
             'send_time' => '2023-04-5 12:09:00',
-            'phone' => '[attribute2]'
+            'phone' => 'attribute2'
         ]);
     }
 }
