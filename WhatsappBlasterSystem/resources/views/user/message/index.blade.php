@@ -4,7 +4,13 @@
         <div class="row">
             <div class="card p-0 rounded-4">
                 <div class="card-header">
-                    <h1 class="text-center mb-md-3 mt-md-3">Message List</h1>
+                    @if ($messages == 'history_null')
+                        <h1 class="text-center mb-md-3 mt-md-3">History Message List</h1>
+                    @elseif($messages->isNotEmpty() && $messages[0]->deleted_at != null)
+                        <h1 class="text-center mb-md-3 mt-md-3">History Message List</h1>
+                    @else
+                        <h1 class="text-center mb-md-3 mt-md-3">Message List</h1>
+                    @endif
                 </div>
                 <div class="p-4">
                     <table id="myTable">
@@ -31,16 +37,16 @@
                                         <td>{{ $message->blasters->name }}</td>
                                         <td>{{ $message->send_time }}</td>
                                         <td>{{ $message->phone }}</td>
-                                        @if( $message->deleted_at === null)
-                                        <td><a href="{{ route('message_edit_view', ['id' => $message->id]) }}"
-                                                class="btn btn-secondary btn-xs">Edit</a>
-                                            <a href="{{ route('message_delete', ['id' => $message->id]) }}"
-                                                onClick="return confirm('Are you sure to delete?')"
-                                                class="btn btn-danger btn-xs">Delete</a>
-                                        </td>
+                                        @if ($message->deleted_at == null)
+                                            <td><a href="{{ route('message_edit_view', ['id' => $message->id]) }}"
+                                                    class="btn btn-secondary btn-xs">Edit</a>
+                                                <a href="{{ route('message_delete', ['id' => $message->id]) }}"
+                                                    onClick="return confirm('Are you sure to delete?')"
+                                                    class="btn btn-danger btn-xs">Delete</a>
+                                            </td>
                                         @else
-                                           <td> <a href="{{ route('history_customer_view', ['id' => $message->id]) }}"
-                                                class="btn btn-primary btn-xs">View</a></td>
+                                            <td> <a href="{{ route('history_customer_view', ['id' => $message->id]) }}"
+                                                    class="btn btn-primary btn-xs">View</a></td>
                                         @endif
                                     </tr>
                                 @endforeach

@@ -171,11 +171,21 @@ class MessageController extends Controller
         $attribute = $sendMessage->phone;
         //get phone number
         $phoneNumber = $sendMessage->customers->$attribute;
-        $data = [
-            'phone_number' => $phoneNumber,
-            'message' => $sendMessage->full_message,
-        ];
 
+        if ($sendMessage->blasters->image != null) {
+            // url("images/{$find_send_messages->blasters->image}")
+            $data = [
+                'phone_number' => $phoneNumber,
+                'message' => $sendMessage->full_message,
+                'type' => 'image',
+                'url' => 'https://i.ibb.co/T2bW2n9/test3.jpg',
+            ];
+        } else {
+            $data = [
+                'phone_number' => $phoneNumber,
+                'message' => $sendMessage->full_message,
+            ];
+        }
         //onsend api send to targe phone number
         $response = \Illuminate\Support\Facades\Http::accept('application/json')
             ->withToken($apiKey)
@@ -199,12 +209,13 @@ class MessageController extends Controller
         $sendMessage->save();
         return back();
     }
-    public function test(){
+    public function test()
+    {
         $currentTime = Carbon::now()->format('Y-m-d H:i');
         //plus second same format with db
-        $currentTime = $currentTime.''.':00';
-        //  $messages = Message::where('send_time', $currentTime)->get();
-        $messages = Message::where('id',4)->get();
+        $currentTime = $currentTime . '' . ':00';
+        $messages = Message::where('send_time', $currentTime)->get();
+        //$messages = Message::where('id', 4)->get();
 
         foreach ($messages as $message) {
             foreach ($message->blasters->customers as $customers) {
@@ -237,16 +248,15 @@ class MessageController extends Controller
                 $attribute = $find_send_messages->phone;
                 //get phone number
                 $phoneNumber = $find_send_messages->customers->$attribute;
-                if($find_send_messages->blasters->image !=null){
-
-               // url("images/{$find_send_messages->blasters->image}")
+                if ($find_send_messages->blasters->image != null) {
+                    // url("images/{$find_send_messages->blasters->image}")
                     $data = [
                         'phone_number' => $phoneNumber,
                         'message' => $find_send_messages->full_message,
-                        'type' => "image",
-                        'url' => "https://i.ibb.co/T2bW2n9/test3.jpg",
+                        'type' => 'image',
+                        'url' => 'https://i.ibb.co/T2bW2n9/test3.jpg',
                     ];
-                }else{
+                } else {
                     $data = [
                         'phone_number' => $phoneNumber,
                         'message' => $find_send_messages->full_message,
@@ -257,7 +267,7 @@ class MessageController extends Controller
                 $response = \Illuminate\Support\Facades\Http::accept('application/json')
                     ->withToken($apiKey)
                     ->post('https://onsend.io/api/v1/send', $data);
-                 dump($response->body());
+                dump($response->body());
 
                 //check send message status
                 $response = json_decode($response, true);
