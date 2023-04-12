@@ -10,7 +10,7 @@ use App\Models\Blaster;
 class Message extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['user_id','message','blaster_id','send_time','phone'];
+    protected $fillable = ['user_id','message','blaster_id','send_time','image'];
 
     public function blasters()
     {

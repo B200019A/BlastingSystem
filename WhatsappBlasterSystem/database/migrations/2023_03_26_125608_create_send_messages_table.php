@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string("blaster_id");
             $table->string("customer_id");
             $table->longText("full_message");
-            $table->string('phone');
             $table->timestamp("fail_at")->nullable();
             $table->timestamp("pass_at")->nullable();
             $table->timestamps();

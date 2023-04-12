@@ -20,7 +20,7 @@
                                 <th>Meesage</th>
                                 <th>List Name</th>
                                 <th>Send time</th>
-                                <th>Phone</th>
+                                <th>Image</th>
                                 <th>Operates</th>
                             </tr>
                         </thead>
@@ -36,7 +36,13 @@
                                         <td>{{ $message->message }}</td>
                                         <td>{{ $message->blasters->name }}</td>
                                         <td>{{ $message->send_time }}</td>
-                                        <td>{{ $message->phone }}</td>
+                                        @if (isset($message->image))
+                                            <td><a class="viewImage" data-toggle="modal"
+                                                    data-id="{{ asset('images') }}/{{ $message->image }}"
+                                                    data-target="#imageModal">{{ $message->image }}</a></td>
+                                        @else
+                                            <td>None</td>
+                                        @endif
                                         @if ($message->deleted_at == null)
                                             <td><a href="{{ route('message_edit_view', ['id' => $message->id]) }}"
                                                     class="btn btn-secondary btn-xs">Edit</a>
@@ -61,4 +67,31 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Blaster Image</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img alt="" class="img-fluid image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script>
+        //for using bootstrap js need to use '$(document).ready(function (){' and above src to call
+        $(document).ready(function() {
+            //id should be unique so instead of using id it is better to use class
+            $('.viewImage').click(function() {
+
+                var image = $(this).data('id');
+                console.log(image);
+                $('.image').attr('src', image);
+                $('#imageModal').modal('show');
+            });
+        });
+    </script>
 @endsection

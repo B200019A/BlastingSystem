@@ -14,7 +14,6 @@
                                 <th>List Name</th>
                                 <th>Customer Id</th>
                                 <th>Message</th>
-                                <th>Phone</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -25,7 +24,6 @@
                                     <td>{{ $customersMessage->blasters->name }}</td>
                                     <td>{{ $customersMessage->customers->id }}</td>
                                     <td>{{ $customersMessage->full_message }}</td>
-                                    <td>{{ $customersMessage->phone }}</td>
                                     {{-- mean that resend successful  --}}
                                     @if($customersMessage->pass_at != null)
                                        <td style="color:green">Successful</td>

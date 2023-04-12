@@ -29,21 +29,17 @@ class MessageController extends Controller
 
     public function add(Request $request)
     {
+
         //valdiate
         $validated = $request->validate([
             'message' => 'required|string',
             'date' => 'required|string',
             'time' => 'required|string',
-            'phone' => 'required|string',
         ]);
 
         //checking
         $blaster = Blaster::where('id', $request->blaster_id)->first();
         if ($blaster->user_id != Auth::id()) {
-            Session::flash('error', 'Edit Fail');
-            return redirect()->route('message_view');
-        }
-        if ($request->phone != ('attribute1' || 'attribute2' || 'attribute3' || 'attribute4' || 'attribute5' || 'attribute6' || 'attribute7')) {
             Session::flash('error', 'Edit Fail');
             return redirect()->route('message_view');
         }
@@ -53,12 +49,20 @@ class MessageController extends Controller
 
         $mergeTime = $date . ' ' . $time;
 
+        $image = $request->file('message_image') ? $request->file('message_image') : null;
+        $imageName = null;
+        if ($image) {
+            $destinationPath = 'images';
+            $image->move(public_path($destinationPath), $image->getClientOriginalName()); //images is the location
+            $imageName = $image->getClientOriginalName();
+        }
+
         $message = Message::create([
             'user_id' => Auth::id(),
             'message' => $request->message,
             'blaster_id' => $request->blaster_id,
             'send_time' => $mergeTime,
-            'phone' => $request->phone,
+            'image' => $imageName ? $imageName : null,
         ]);
 
         return redirect()->route('message_view');
@@ -81,7 +85,7 @@ class MessageController extends Controller
             'message' => 'required|string',
             'date' => 'required|string',
             'time' => 'required|string',
-            'phone' => 'required|string',
+            'image' => 'required|string',
         ]);
 
         //checking
@@ -104,10 +108,17 @@ class MessageController extends Controller
             Session::flash('error', 'Edit Fail');
             return redirect()->route('message_view');
         }
+        if ($request->file('message_image') != '' && $blaster->image != $request->file('message_image')->getClientOriginalName()) {
+            $image = $request->file('message_image');
+            $destinationPath = 'images';
+            $image->move(public_path($destinationPath), $image->getClientOriginalName()); //images is the location
+            $imageName = $image->getClientOriginalName();
+            $message->image = $imageName;
+        }
+
         $message->message = $request->message;
         $message->blaster_id = $request->blaster_id;
         $message->send_time = $mergeTime;
-        $message->phone = $request->phone;
         $message->save();
 
         return redirect()->route('message_view');

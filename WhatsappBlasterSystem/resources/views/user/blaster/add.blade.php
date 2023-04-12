@@ -17,8 +17,6 @@
                     <label for="blaster_name">Name</label>
                     <input class="form-control" type="text" id="blaster_name" name="blaster_name"
                         value="{{ isset($blaster->name) ? $blaster->name : null }}" required>
-                    <label for="blaster_image">Image</label>
-                    <input class="form-control" type="file" id="blaster_image" name="blaster_image">
                 </div>
                 <br>
                 <button type="submit" class="btn btn-primary">{{ isset($blaster) ? 'Upadte' : 'Create' }}</button>
@@ -26,22 +24,4 @@
             </div>
         </div>
     </div>
-    {{-- <div class="container">
-        <div class="row">
-            <div class="col col-12 col-md-3"></div>
-            <div class="col col-12 col-md-6 mt-md-5 border p-2 p-md-5 rounded-5 form-background">
-                <h2 class="text-center mb-5">Testing</h2>
-                <form action="{{ route('test') }}" method="POST" enctype="multipart/form-data">
-                    @CSRF
-
-                    <div class="form-group">
-                        <label for="blaster_name">Name</label>
-                        <input class="form-control" type="text" id="w" name="blaster_name">
-                    </div>
-                     <br>
-                    <button type="submit" class="btn btn-primary">Create</button>
-                </form>
-            </div>
-        </div>
-    </div> --}}
 @endsection

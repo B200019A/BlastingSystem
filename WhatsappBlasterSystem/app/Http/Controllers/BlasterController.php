@@ -23,18 +23,9 @@ class BlasterController extends Controller
 
     public function add(Request $request)
     {
-        $image = $request->file('blaster_image') ? $request->file('blaster_image') : null;
-        $imageName = null;
-        if ($image) {
-            $destinationPath = 'images';
-            $image->move(public_path($destinationPath), $image->getClientOriginalName()); //images is the location
-            $imageName = $image->getClientOriginalName();
-        }
-
         $blasting = Blaster::create([
             'user_id' => Auth::id(),
             'name' => $request->blaster_name,
-            'image' => $imageName ? $imageName : null,
         ]);
         return redirect()->route('blaster_view');
     }
@@ -85,13 +76,6 @@ class BlasterController extends Controller
             return redirect()->route('blaster_view');
         }
 
-        if ($request->file('blaster_image') != '' && $blaster->image != $request->file('blaster_image')->getClientOriginalName()) {
-            $image = $request->file('blaster_image');
-            $destinationPath = 'images';
-            $image->move(public_path($destinationPath), $image->getClientOriginalName()); //images is the location
-            $imageName = $image->getClientOriginalName();
-            $blaster->image = $imageName;
-        }
         $blaster->name = $request->blaster_name;
         $blaster->save();
 
