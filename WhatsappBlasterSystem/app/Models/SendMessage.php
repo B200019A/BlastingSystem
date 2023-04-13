@@ -16,7 +16,7 @@ class SendMessage extends Model
 
     public function messages()
     {
-        return $this->belongsTo(Message::class,'id','message_id');
+        return $this->hasOne(Message::class,'id','message_id');
     }
 
     public function blasters()

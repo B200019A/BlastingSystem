@@ -22,6 +22,9 @@
                                 <th>Send time</th>
                                 <th>Image</th>
                                 <th>Operates</th>
+                                @if(isset($messages))
+                                <th>Send Option</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -45,20 +48,26 @@
                                         @endif
                                         @if ($message->deleted_at == null)
                                             <td><a href="{{ route('message_edit_view', ['id' => $message->id]) }}"
-                                                    class="btn btn-secondary btn-xs">Edit</a>
+                                                    class="btn btn-success btn-xs">Edit</a>
                                                 <a href="{{ route('message_delete', ['id' => $message->id]) }}"
                                                     onClick="return confirm('Are you sure to delete?')"
                                                     class="btn btn-danger btn-xs">Delete</a>
                                             </td>
+                                              <td><a href="{{ route('send_now', ['id' => $message->id]) }}"
+                                                    class="btn btn-primary btn-xs">Send Now</a>
+                                                    <a href=""
+                                                    class="btn btn-secondary btn-xs">Send Later</a></td>
                                         @else
                                             <td> <a href="{{ route('history_customer_view', ['id' => $message->id]) }}"
                                                     class="btn btn-primary btn-xs">View</a></td>
+                                            <td style="color:grey">None</td>
                                         @endif
+
                                     </tr>
                                 @endforeach
                             @else
                                 <tr>
-                                    <td colspan="6" class="text-center">Add Message List now!</td>
+                                    <td colspan="7" class="text-center">Add Message List now!</td>
                                 </tr>
                             @endif
                         </tbody>

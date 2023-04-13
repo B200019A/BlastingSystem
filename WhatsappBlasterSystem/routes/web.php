@@ -70,6 +70,8 @@ Route::prefix('user')
             Route::get('/meesage/history/customer/{id}', 'history_customer')->name('history_customer_view');
             Route::get('/meesage/resend/{id}', 'resend')->name('resend_message');
             Route::post('/test', 'test')->name('test');
+            Route::get('/send/now/{id}', 'send_now')->name('send_now');
+
 
         });
     });

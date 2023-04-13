@@ -29,7 +29,6 @@ class MessageController extends Controller
 
     public function add(Request $request)
     {
-
         //valdiate
         $validated = $request->validate([
             'message' => 'required|string',
@@ -178,18 +177,18 @@ class MessageController extends Controller
         $api = OnsendApi::where('user_id', Auth::id())->first();
         $apiKey = $api->api;
 
-        //get attribute
-        $attribute = $sendMessage->phone;
         //get phone number
-        $phoneNumber = $sendMessage->customers->$attribute;
+        $phoneNumber = $sendMessage->customers->attribute1;
 
-        if ($sendMessage->blasters->image != null) {
+        $findMessage  = Message::onlyTrashed()->where('id',$sendMessage->message_id)->first();
+
+        if ($findMessage->image != null) {
             // url("images/{$find_send_messages->blasters->image}")
             $data = [
                 'phone_number' => $phoneNumber,
                 'message' => $sendMessage->full_message,
                 'type' => 'image',
-                'url' => 'https://i.ibb.co/T2bW2n9/test3.jpg',
+                'url' => 'http://wablast.online/public/images/test3.jpeg',
             ];
         } else {
             $data = [
@@ -218,6 +217,82 @@ class MessageController extends Controller
             }
         }
         $sendMessage->save();
+        return back();
+    }
+
+    public function send_now($id)
+    {
+        $message = Message::where([['id', $id], ['user_id', Auth::id()]])->first();
+        if($message == null){
+            return back();
+        }
+        foreach ($message->blasters->customers as $customers) {
+            //orignal text
+            $oriText = $message->message;
+            //replace attribute text in messge
+            $oriText = str_replace('[attribute1]', $customers->attribute1, $oriText);
+            $oriText = str_replace('[attribute2]', $customers->attribute2, $oriText);
+            $oriText = str_replace('[attribute3]', $customers->attribute3, $oriText);
+            $oriText = str_replace('[attribute4]', $customers->attribute4, $oriText);
+            $oriText = str_replace('[attribute5]', $customers->attribute5, $oriText);
+            $oriText = str_replace('[attribute6]', $customers->attribute6, $oriText);
+            $oriText = str_replace('[attribute7]', $customers->attribute7, $oriText);
+            //store send message table
+            $send_messages = SendMessage::create([
+                'message_id' => $message->id,
+                'blaster_id' => $message->blasters->id,
+                'customer_id' => $customers->id,
+                'full_message' => $oriText,
+                'phone' => $message->phone,
+            ]);
+        }
+        //send message to customer
+        $api = OnsendApi::where('user_id', $message->user_id)->first();
+        $apiKey = $api->api;
+
+        $find_send_messages = SendMessage::where('message_id', $message->id)->get();
+        foreach ($find_send_messages as $find_send_messages) {
+
+            //get phone number
+            $phoneNumber = $find_send_messages->customers->attribute1;
+
+            if ($message->image != null) {
+                // url("images/{$find_send_messages->blasters->image}")
+                $data = [
+                    'phone_number' => $phoneNumber,
+                    'message' => $find_send_messages->full_message,
+                    'type' => 'image',
+                    'url' => 'http://wablast.online/public/images/test3.jpeg',
+                ];
+            } else {
+                $data = [
+                    'phone_number' => $phoneNumber,
+                    'message' => $find_send_messages->full_message,
+                ];
+            }
+            //onsend api send to targe phone number
+            $response = \Illuminate\Support\Facades\Http::accept('application/json')
+                ->withToken($apiKey)
+                ->post('https://onsend.io/api/v1/send', $data);
+
+            //check send message status
+            $response = json_decode($response, true);
+            $collection = collect($response);
+            $time = Carbon::now();
+            if (Arr::has($collection, 'errors')) {
+                $find_send_messages->fail_at = $time;
+            } else {
+                if (!$collection['success']) {
+                    //cannot send the target phone number
+                    $find_send_messages->fail_at = $time;
+                } else {
+                    //successful send the phone number
+                    $find_send_messages->pass_at = $time;
+                }
+            }
+            $find_send_messages->save();
+            $message->delete();
+        }
         return back();
     }
     public function test()

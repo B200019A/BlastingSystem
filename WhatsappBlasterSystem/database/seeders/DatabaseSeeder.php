@@ -94,7 +94,7 @@ class DatabaseSeeder extends Seeder
         //default message
         Message::create([
             'user_id' => '2',
-            'message' => 'Hi,[attribute1], your adrress is [attribute3], you road tax will be expire at [attribute4].',
+            'message' => 'Hi,[attribute2], your adrress is [attribute3], you road tax will be expire at [attribute4].',
             'blaster_id' => '1',
             'send_time' => '2023-04-5 12:09:00',
             'image' => 'test.png',
