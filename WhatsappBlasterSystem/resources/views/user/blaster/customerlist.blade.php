@@ -125,19 +125,6 @@
                                         class="fa fa-edit"></i>Edit</a>
                             </div>
                         </div>
-                        <div class="input-group mb-3">
-                            @if (isset($blaster->image))
-                                <input type="hidden" value="{{ $blaster->id }}" name="blaster_id">
-                                <h5 style="padding-top:6px; padding-right:5px;">Image: </h5>
-                                <h5 style="padding-top:6px; padding-right:5px;"><a class="viewImage" data-toggle="modal"
-                                        data-id="{{ asset('images') }}/{{ $blaster->image }}"
-                                        data-target="#imageModal">{{ $blaster->image }}</a></h5>
-                            @else
-                                  <input type="hidden" value="{{ $blaster->id }}" name="blaster_id">
-                                <h5 style="padding-top:6px; padding-right:5px;">Image: </h5>
-                                <h5 style="padding-top:6px; padding-right:5px;">None</h5>
-                            @endif
-                        </div>
                         @CSRF
                         <div class="input-group mb-3">
                             <h5 style="padding-top:6px; padding-right:5px;">Import: </h5>

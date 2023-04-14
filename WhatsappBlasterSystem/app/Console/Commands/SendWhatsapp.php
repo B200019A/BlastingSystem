@@ -61,17 +61,16 @@ class SendWhatsapp extends Command
 
             $find_send_messages = SendMessage::where('message_id', $message->id)->get();
             foreach ($find_send_messages as $find_send_messages) {
-                //get attribute
-                $attribute = $find_send_messages->phone;
                 //get phone number
-                $phoneNumber = $find_send_messages->customers->$attribute;
-                if ($find_send_messages->blasters->image != null) {
+                $phoneNumber = $find_send_messages->customers->attribute1;
+
+                if ($message->image != null) {
                     // url("images/{$find_send_messages->blasters->image}")
                     $data = [
                         'phone_number' => $phoneNumber,
                         'message' => $find_send_messages->full_message,
                         'type' => 'image',
-                        'url' => 'https://i.ibb.co/T2bW2n9/test3.jpg',
+                        'url' => url("public/images/{$message->image}"),
                     ];
                 } else {
                     $data = [
@@ -79,12 +78,10 @@ class SendWhatsapp extends Command
                         'message' => $find_send_messages->full_message,
                     ];
                 }
-
                 //onsend api send to targe phone number
                 $response = \Illuminate\Support\Facades\Http::accept('application/json')
                     ->withToken($apiKey)
                     ->post('https://onsend.io/api/v1/send', $data);
-                dump($response->body());
 
                 //check send message status
                 $response = json_decode($response, true);

@@ -171,6 +171,7 @@ class MessageController extends Controller
 
     public function resend($id)
     {
+
         $sendMessage = SendMessage::where('id', $id)->first();
 
         //send message to customer
@@ -188,7 +189,7 @@ class MessageController extends Controller
                 'phone_number' => $phoneNumber,
                 'message' => $sendMessage->full_message,
                 'type' => 'image',
-                'url' => 'http://wablast.online/public/images/test3.jpeg',
+                'url' => url("public/images/{$findMessage->image}"),
             ];
         } else {
             $data = [
@@ -226,6 +227,7 @@ class MessageController extends Controller
         if($message == null){
             return back();
         }
+
         foreach ($message->blasters->customers as $customers) {
             //orignal text
             $oriText = $message->message;
@@ -257,12 +259,11 @@ class MessageController extends Controller
             $phoneNumber = $find_send_messages->customers->attribute1;
 
             if ($message->image != null) {
-                // url("images/{$find_send_messages->blasters->image}")
                 $data = [
                     'phone_number' => $phoneNumber,
                     'message' => $find_send_messages->full_message,
                     'type' => 'image',
-                    'url' => 'http://wablast.online/public/images/test3.jpeg',
+                        'url' => url("public/images/{$message->image}"),
                 ];
             } else {
                 $data = [
