@@ -160,11 +160,19 @@
                                         class="fa fa-plus"></i></a>
                             </div>
                         </div>
+                        <div class="input-group mb-3">
+                            <h5 style="padding-top:6px; padding-right:5px;">Download Template: </h5>
+                            <div class="custom-file">
+                            </div>
+                            <div class="input-group-append">
+                                <a href="{{route('template_download')}}" class="btn btn-outline-secondary"><i class="bi bi-download"></i></a>
+                            </div>
+                        </div>
                         <table id="myTable">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Customer Id</th>
+                                    {{-- <th>Customer Id</th> --}}
                                     <th>Attribute1</th>
                                     <th>Attribute2</th>
                                     <th>Attribute3</th>
@@ -180,7 +188,7 @@
                                     @foreach ($blaster->customers as $key => $customer)
                                         <tr>
                                             <th>{{ $key + 1 }}</th>
-                                            <td>{{ $customer->id }}</td>
+                                            {{-- <td>{{ $customer->id }}</td> --}}
                                             <td>{{ $customer->attribute1 }}</td>
                                             <td>{{ $customer->attribute2 }}</td>
                                             <td>{{ $customer->attribute3 }}</td>

@@ -31,7 +31,7 @@ class CustomerImport implements ToModel, WithHeadingRow, SkipsEmptyRows, WithLim
         return new Customer([
             // 'id'  => $row['user_id'],
             'blaster_id'  => $this->blaster_id,
-            'attribute1' => $row['attribute1'],
+            'attribute1' => $row['phone_no'],
             'attribute2' => $row['attribute2'],
             'attribute3' => $row['attribute3'],
             'attribute4' => $row['attribute4'],

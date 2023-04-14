@@ -68,4 +68,10 @@ class CustomerController extends Controller
 
         return back();
     }
+
+    public function download(){
+        $templatePath = public_path("excel_template/excel_template.xlsx");
+        return response()->download($templatePath);
+    }
+
 }

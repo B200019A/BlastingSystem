@@ -2,6 +2,8 @@
 
 //use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Row;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -57,6 +59,7 @@ Route::prefix('user')
             Route::post('/customer/add', 'add')->name('customer_add');
             Route::post('/customer/edit', 'edit')->name('customer_edit');
             Route::post('/customer/delete', 'delete')->name('customer_delete');
+            Route::get('/customer/download','download')->name('template_download');
         });
 
         Route::controller(App\Http\Controllers\MessageController::class)->group(function () {
