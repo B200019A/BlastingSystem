@@ -165,7 +165,7 @@
                             <div class="custom-file">
                             </div>
                             <div class="input-group-append">
-                                <a href="{{route('template_download')}}" class="btn btn-outline-secondary"><i class="bi bi-download"></i></a>
+                                <a href="{{route('template_download')}}" class="btn btn-outline-secondary"><i class="fa fa-download"></i>   </a>
                             </div>
                         </div>
                         <table id="myTable">
