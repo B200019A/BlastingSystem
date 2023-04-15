@@ -31,11 +31,21 @@ class MessageController extends Controller
     public function add(Request $request)
     {
         //valdiate
-        $validated = $request->validate([
-            'message' => 'required|string',
-            'date' => 'required|string',
-            'time' => 'required|string',
-        ]);
+        if($request->file('message_image')!= null){
+            $validated = $request->validate([
+                'message' => 'required|string',
+                'date' => 'required|string',
+                'time' => 'required|string',
+                'message_image'=> 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            ]);
+        }else{
+            $validated = $request->validate([
+                'message' => 'required|string',
+                'date' => 'required|string',
+                'time' => 'required|string',
+            ]);
+        }
+
 
         //checking
         $blaster = Blaster::where('id', $request->blaster_id)->first();

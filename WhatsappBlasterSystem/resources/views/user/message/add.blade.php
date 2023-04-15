@@ -47,6 +47,11 @@
                     <br>
                     <label for="message_image">Image</label>
                     <input class="form-control" type="file" id="message_image" name="message_image">
+                     @error('message_image')
+                        <span class="invalid-message" style="color:red;" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                     <br>
                     <label for="date">Date</label>
                     <input class="form-control" type="date" id="date" name="date" min=""
