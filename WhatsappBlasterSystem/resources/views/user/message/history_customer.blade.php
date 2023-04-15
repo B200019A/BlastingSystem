@@ -12,7 +12,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>List Name</th>
-                                <th>Customer Id</th>
+                                <th>Phone Number</th>
                                 <th>Message</th>
                                 <th>Status</th>
                             </tr>
@@ -22,7 +22,7 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $customersMessage->blasters->name }}</td>
-                                    <td>{{ $customersMessage->customers->id }}</td>
+                                    <td>{{ $customersMessage->customers->attribute1 }}</td>
                                     <td>{{ $customersMessage->full_message }}</td>
                                     {{-- mean that resend successful  --}}
                                     @if($customersMessage->pass_at != null)

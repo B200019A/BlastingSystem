@@ -10,6 +10,7 @@ use App\Models\SendMessage;
 use Auth;
 use Session;
 use Carbon\Carbon;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Arr;
 
 class MessageController extends Controller
@@ -296,85 +297,38 @@ class MessageController extends Controller
         }
         return back();
     }
-    public function test()
+    public function test(Request $request)
     {
-        $currentTime = Carbon::now()->format('Y-m-d H:i');
-        //plus second same format with db
-        $currentTime = $currentTime . '' . ':00';
-        $messages = Message::where('send_time', $currentTime)->get();
-        //$messages = Message::where('id', 4)->get();
+         //valdiate
+         $validated = $request->validate([
+            'message_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+        ]);
 
-        foreach ($messages as $message) {
-            foreach ($message->blasters->customers as $customers) {
-                //orignal text
-                $oriText = $message->message;
-                //replace attribute text in messge
-                $oriText = str_replace('[attribute1]', $customers->attribute1, $oriText);
-                $oriText = str_replace('[attribute2]', $customers->attribute2, $oriText);
-                $oriText = str_replace('[attribute3]', $customers->attribute3, $oriText);
-                $oriText = str_replace('[attribute4]', $customers->attribute4, $oriText);
-                $oriText = str_replace('[attribute5]', $customers->attribute5, $oriText);
-                $oriText = str_replace('[attribute6]', $customers->attribute6, $oriText);
-                $oriText = str_replace('[attribute7]', $customers->attribute7, $oriText);
-                //store send message table
-                $send_messages = SendMessage::create([
-                    'message_id' => $message->id,
-                    'blaster_id' => $message->blasters->id,
-                    'customer_id' => $customers->id,
-                    'full_message' => $oriText,
-                    'phone' => $message->phone,
-                ]);
-            }
-            //send message to customer
-            $api = OnsendApi::where('user_id', $message->user_id)->first();
-            $apiKey = $api->api;
 
-            $find_send_messages = SendMessage::where('message_id', $message->id)->get();
-            foreach ($find_send_messages as $find_send_messages) {
-                //get attribute
-                $attribute = $find_send_messages->phone;
-                //get phone number
-                $phoneNumber = $find_send_messages->customers->$attribute;
-                if ($find_send_messages->blasters->image != null) {
-                    // url("images/{$find_send_messages->blasters->image}")
-                    $data = [
-                        'phone_number' => $phoneNumber,
-                        'message' => $find_send_messages->full_message,
-                        'type' => 'image',
-                        'url' => 'https://i.ibb.co/T2bW2n9/test3.jpg',
-                    ];
-                } else {
-                    $data = [
-                        'phone_number' => $phoneNumber,
-                        'message' => $find_send_messages->full_message,
-                    ];
-                }
+        //me
+        // $image = $request->file('message_image') ? $request->file('message_image') : null;
+        // $imageName = null;
+        // if ($image) {
+        //     $destinationPath = 'images';
+        //     $image->move(public_path($destinationPath), $image->getClientOriginalName()); //images is the location
+        //     $imageName = $image->getClientOriginalName();
+        // }
 
-                //onsend api send to targe phone number
-                $response = \Illuminate\Support\Facades\Http::accept('application/json')
-                    ->withToken($apiKey)
-                    ->post('https://onsend.io/api/v1/send', $data);
-                dump($response->body());
 
-                //check send message status
-                $response = json_decode($response, true);
-                $collection = collect($response);
-                $time = Carbon::now();
-                if (Arr::has($collection, 'errors')) {
-                    $find_send_messages->fail_at = $time;
-                } else {
-                    if (!$collection['success']) {
-                        //cannot send the target phone number
-                        $find_send_messages->fail_at = $time;
-                    } else {
-                        //successful send the phone number
-                        $find_send_messages->pass_at = $time;
-                    }
-                }
-                $find_send_messages->save();
-                $message->delete();
-            }
-        }
-        //return back();
+        // reference
+        $image = $request->file('message_image') ? $request->file('message_image') : null;
+        $input['imagename'] = time().'.'.$image->getClientOriginalExtension();
+        $destinationPath = public_path('images');
+
+        $img = Image::make($request->file('message_image')->getRealPath());
+        $img->resize(100, 100, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($destinationPath.'/'.$input['imagename']);
+
+        $destinationPath = public_path('/images');
+        $image->move($destinationPath, $input['imagename']);
+
+        //$this->postImage->add($input);
+        return back();
     }
 }

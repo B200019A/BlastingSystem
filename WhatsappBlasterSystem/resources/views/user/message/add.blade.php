@@ -15,7 +15,9 @@
                 @CSRF
 
                 <div class="form-group">
+
                     <input type="hidden" name="meesage_id" value={{ isset($message->id) ? $message->id : null }}>
+                     <label for="blaster_id">Blaster List</label>
                     <select name="blaster_id" id="blaster_id" class="form-control" value="{{ isset($message) ? '' : '1' }}"
                         required>
                         @foreach ($blasters as $blaster)
@@ -30,7 +32,8 @@
                             @endif
                         @endforeach
                     </select>
-                    <label for="message">message</label>
+                    <br>
+                    <label for="message">Message</label>
                      <textarea  class="form-control" id="message" name="message" rows="4" cols="50">{{ $message->message ?? null }}</textarea>
                     @error('message')
                         <span class="invalid-message" style="color:red;" role="alert">
