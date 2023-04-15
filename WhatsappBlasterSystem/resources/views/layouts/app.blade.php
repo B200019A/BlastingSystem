@@ -22,13 +22,13 @@
 </head>
 @if (Session::has('error'))
     <!---for error user alert--->
-    <div class="alert alert-danger" role="alert">
+    <div class="alert alert-danger" role="alert" style="margin-bottom: 0 !important;">
         {{ Session::get('error') }}
     </div>
 @endif
 @if (Session::has('success'))
     <!---for success alert--->
-    <div class="alert alert-success" role="alert">
+    <div class="alert alert-success" role="alert" style="margin-bottom: 0 !important;">
         {{ Session::get('success') }}
     </div>
 @endif

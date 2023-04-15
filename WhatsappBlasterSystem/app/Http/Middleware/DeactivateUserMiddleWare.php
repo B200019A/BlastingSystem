@@ -26,7 +26,7 @@ class DeactivateUserMiddleWare
 
             return redirect()
                 ->route('login')
-                ->with('error', 'Your Account is suspended, please contact Admin.');
+                ->with('error', 'Your Account need to waiting the admin aprrove, please contact Admin.');
         }
 
         return $next($request);
