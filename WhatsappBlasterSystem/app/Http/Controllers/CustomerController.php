@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\Blaster;
 use  App\Imports\CustomerImport;
+use Exception;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\HeadingRowImport;
 
 class CustomerController extends Controller
 {
@@ -25,7 +27,12 @@ class CustomerController extends Controller
             'customer_excel'=>'required|mimes:xlsx,csv,txt'
         ]);
 
-        Excel::import(new CustomerImport($request->input('blaster_id'),$request->input('current_existed')),$request->file('customer_excel'));
+        try{
+            Excel::import(new CustomerImport($request->input('blaster_id'),$request->input('current_existed')),$request->file('customer_excel'));
+        }
+        catch (Exception $e){
+            return back()->withError('Please make sure you are using correct template.');
+        }
 
         return redirect()->route('blaster_view_customer',$request->input('blaster_id'));//return to the customer list
     }

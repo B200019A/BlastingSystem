@@ -1,4 +1,3 @@
-import './bootstrap';
 function submitForm(btn) {
     // disable the button
     btn.disabled = true;
