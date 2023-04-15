@@ -46,7 +46,7 @@
                             can copy the attribute apply to your message</small>)</p>
                     <br>
                     <label for="message_image">Image</label>
-                    <input class="form-control" type="file" id="message_image" name="message_image" required>
+                    <input class="form-control" type="file" id="message_image" name="message_image">
                     <br>
                     <label for="date">Date</label>
                     <input class="form-control" type="date" id="date" name="date" min=""

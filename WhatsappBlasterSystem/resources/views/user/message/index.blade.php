@@ -44,7 +44,7 @@
                                                     data-id="{{ asset('images') }}/{{ $message->image }}"
                                                     data-target="#imageModal">{{ $message->image }}</a></td>
                                         @else
-                                            <td>None</td>
+                                            <td style="color:grey;">None</td>
                                         @endif
                                         @if ($message->deleted_at == null)
                                             <td><a href="{{ route('message_edit_view', ['id' => $message->id]) }}"
