@@ -19,7 +19,7 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/css/app.css'])
-    <script type="text/javascript" src="{{asset('function.js')}}" ></script>
+    {{-- <script type="text/javascript" src="{{asset('function.js')}}" ></script> --}}
 </head>
 @if (Session::has('error'))
     <!---for error user alert--->
@@ -97,7 +97,8 @@
                                         <a class="dropdown-item" href="{{ route('message_add_view') }}">Add Message
                                             </a>
                                         <a class="dropdown-item" href="{{ route('message_view') }}">View Message</a>
-                                        <a class="dropdown-item" href="{{ route('message_history_view') }}">View History</a>
+                                        <a class="dropdown-item" href="{{route('message_delete_view')}}">Deleted Message</a>
+                                        <a class="dropdown-item" href="{{ route('message_history_view') }}">View Send Message History</a>
                                     </div>
                                 </li>
                             @endif

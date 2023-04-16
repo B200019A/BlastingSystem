@@ -43,7 +43,7 @@
                         </span>
                     @enderror
                     <br>
-                    <button type="submit" class="btn btn-primary">{{ isset($blaster) ? 'Upadte' : 'Create' }}</button>
+                    <button type="submit" onclick="submitFrom(this)" class="btn btn-primary">{{ isset($blaster) ? 'Upadte' : 'Create' }}</button>
                 </form>
             </div>
         </div>

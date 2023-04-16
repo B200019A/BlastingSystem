@@ -31,21 +31,20 @@ class MessageController extends Controller
     public function add(Request $request)
     {
         //valdiate
-        if($request->file('message_image')!= null){
+        if ($request->file('message_image') != null) {
             $validated = $request->validate([
                 'message' => 'required|string',
                 'date' => 'required|string',
                 'time' => 'required|string',
-                'message_image'=> 'required|image|mimes:jpeg,png,jpg,gif,svg',
+                'message_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
             ]);
-        }else{
+        } else {
             $validated = $request->validate([
                 'message' => 'required|string',
                 'date' => 'required|string',
                 'time' => 'required|string',
             ]);
         }
-
 
         //checking
         $blaster = Blaster::where('id', $request->blaster_id)->first();
@@ -91,12 +90,21 @@ class MessageController extends Controller
     }
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'message' => 'required|string',
-            'date' => 'required|string',
-            'time' => 'required|string',
-            'image' => 'required|string',
-        ]);
+         //valdiate
+         if ($request->file('message_image') != null) {
+            $validated = $request->validate([
+                'message' => 'required|string',
+                'date' => 'required|string',
+                'time' => 'required|string',
+                'message_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            ]);
+        } else {
+            $validated = $request->validate([
+                'message' => 'required|string',
+                'date' => 'required|string',
+                'time' => 'required|string',
+            ]);
+        }
 
         //checking
         $blaster = Blaster::where('id', $request->blaster_id)->first();
@@ -104,10 +112,7 @@ class MessageController extends Controller
             Session::flash('error', 'Edit Fail');
             return redirect()->route('message_view');
         }
-        if ($request->phone != ('attribute1' || 'attribute2' || 'attribute3' || 'attribute4' || 'attribute5' || 'attribute6' || 'attribute7')) {
-            Session::flash('error', 'Edit Fail');
-            return redirect()->route('message_view');
-        }
+
         $date = $request->date;
         $time = $request->time;
 
@@ -154,35 +159,44 @@ class MessageController extends Controller
             ->route('message_view')
             ->with('messages', 'delete successfully!');
     }
-
-    public function history_view()
+    public function delete_view()
     {
         $data['messages'] = Message::onlyTrashed()
             ->where('user_id', Auth::id())
             ->get();
         if ($data['messages']->count() == null) {
-            $data['messages'] = 'history_null';
+            $data['messages'] = 'message_history_null';
         }
         return view('user/message/index', $data);
     }
+    public function history_view()
+    {
+            $data = SendMessage::where('user_id',Auth::id())->get();
+            $data = $data->groupBy('send_time');
+            $sendMessages = [];
+            foreach($data as $key=> $data){
+                $searchMessage = SendMessage::where('send_time',$key)->first();
+                array_push($sendMessages, $searchMessage);
 
-    public function history_customer($id)
+            };
+        return view('user/message/send_message')->with('sendMessages', $sendMessages);
+    }
+
+    public function history_customer($send_time)
     {
         //checking
-        $message = Message::onlyTrashed()
-            ->where('id', $id)
-            ->first();
-        if ($message->user_id != Auth::id()) {
-            return back();
-        }
-        $data['customersMessages'] = SendMessage::where('message_id', $id)->get();
+        // $message = Message::onlyTrashed()
+        //     ->where('id', $send_time)
+        //     ->first();
+        // if ($message->user_id != Auth::id()) {
+        //     return back();
+        // }
+        $data['customersMessages'] = SendMessage::where('send_time', $send_time)->get();
 
         return view('user/message/history_customer', $data);
     }
-
     public function resend($id)
     {
-
         $sendMessage = SendMessage::where('id', $id)->first();
 
         //send message to customer
@@ -192,15 +206,13 @@ class MessageController extends Controller
         //get phone number
         $phoneNumber = $sendMessage->customers->attribute1;
 
-        $findMessage  = Message::onlyTrashed()->where('id',$sendMessage->message_id)->first();
-
-        if ($findMessage->image != null) {
+        if ($sendMessage->messages->image != null) {
             // url("images/{$find_send_messages->blasters->image}")
             $data = [
                 'phone_number' => $phoneNumber,
                 'message' => $sendMessage->full_message,
                 'type' => 'image',
-                'url' => url("public/images/{$findMessage->image}"),
+                'url' => url("public/images/{$sendMessage->messages->image}"),
             ];
         } else {
             $data = [
@@ -235,10 +247,10 @@ class MessageController extends Controller
     public function send_now($id)
     {
         $message = Message::where([['id', $id], ['user_id', Auth::id()]])->first();
-        if($message == null){
+        if ($message == null) {
             return back();
         }
-
+        $currentTime = Carbon::now();
         foreach ($message->blasters->customers as $customers) {
             //orignal text
             $oriText = $message->message;
@@ -251,21 +263,23 @@ class MessageController extends Controller
             $oriText = str_replace('[attribute6]', $customers->attribute6, $oriText);
             $oriText = str_replace('[attribute7]', $customers->attribute7, $oriText);
             //store send message table
+
             $send_messages = SendMessage::create([
+                'user_id' => Auth::id(),
                 'message_id' => $message->id,
                 'blaster_id' => $message->blasters->id,
                 'customer_id' => $customers->id,
                 'full_message' => $oriText,
-                'phone' => $message->phone,
+                'send_time' => $currentTime, //store current time
             ]);
         }
         //send message to customer
         $api = OnsendApi::where('user_id', $message->user_id)->first();
         $apiKey = $api->api;
 
-        $find_send_messages = SendMessage::where('message_id', $message->id)->get();
-        foreach ($find_send_messages as $find_send_messages) {
+        $find_send_messages = SendMessage::where('send_time', $currentTime)->get();
 
+        foreach ($find_send_messages as $find_send_messages) {
             //get phone number
             $phoneNumber = $find_send_messages->customers->attribute1;
 
@@ -274,7 +288,7 @@ class MessageController extends Controller
                     'phone_number' => $phoneNumber,
                     'message' => $find_send_messages->full_message,
                     'type' => 'image',
-                        'url' => url("public/images/{$message->image}"),
+                    'url' => url("public/images/{$message->image}"),
                 ];
             } else {
                 $data = [
@@ -303,17 +317,16 @@ class MessageController extends Controller
                 }
             }
             $find_send_messages->save();
-            $message->delete();
+            // $message->delete();
         }
         return back();
     }
     public function test(Request $request)
     {
-         //valdiate
-         $validated = $request->validate([
+        //valdiate
+        $validated = $request->validate([
             'message_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
         ]);
-
 
         //me
         // $image = $request->file('message_image') ? $request->file('message_image') : null;
@@ -324,16 +337,15 @@ class MessageController extends Controller
         //     $imageName = $image->getClientOriginalName();
         // }
 
-
         // reference
         $image = $request->file('message_image') ? $request->file('message_image') : null;
-        $input['imagename'] = time().'.'.$image->getClientOriginalExtension();
+        $input['imagename'] = time() . '.' . $image->getClientOriginalExtension();
         $destinationPath = public_path('images');
 
         $img = Image::make($request->file('message_image')->getRealPath());
         $img->resize(100, 100, function ($constraint) {
             $constraint->aspectRatio();
-        })->save($destinationPath.'/'.$input['imagename']);
+        })->save($destinationPath . '/' . $input['imagename']);
 
         $destinationPath = public_path('/images');
         $image->move($destinationPath, $input['imagename']);

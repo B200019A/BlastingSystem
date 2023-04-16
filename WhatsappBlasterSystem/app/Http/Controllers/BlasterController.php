@@ -44,7 +44,7 @@ class BlasterController extends Controller
         }
 
         return redirect()
-            ->route('blasting_view')
+            ->route('blaster_view')
             ->with('messages', 'delete successfully!');
     }
     public function viewCustomer($id)

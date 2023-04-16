@@ -4,10 +4,10 @@
         <div class="row">
             <div class="card p-0 rounded-4">
                 <div class="card-header">
-                    @if ($messages == 'history_null')
-                        <h1 class="text-center mb-md-3 mt-md-3">History Message List</h1>
+                    @if ($messages == 'message_history_null')
+                        <h1 class="text-center mb-md-3 mt-md-3">Recently Deleted Message List</h1>
                     @elseif($messages->isNotEmpty() && $messages[0]->deleted_at != null)
-                        <h1 class="text-center mb-md-3 mt-md-3">History Message List</h1>
+                        <h1 class="text-center mb-md-3 mt-md-3">Recently Deleted Message List</h1>
                     @else
                         <h1 class="text-center mb-md-3 mt-md-3">Message List</h1>
                     @endif
@@ -19,18 +19,18 @@
                                 <th>No</th>
                                 <th>Meesage</th>
                                 <th>List Name</th>
-                                <th>Send time</th>
+                                <th>Auto Send time</th>
                                 <th>Image</th>
                                 <th>Operates</th>
-                                @if(isset($messages))
-                                <th>Send Option</th>
+                                @if (isset($messages))
+                                    <th>Send Option</th>
                                 @endif
                             </tr>
                         </thead>
                         <tbody>
-                            @if ($messages == 'history_null')
+                            @if ($messages == 'message_history_null')
                                 <tr>
-                                    <td colspan="6" class="text-center">Empty History</td>
+                                    <td colspan="7" class="text-center">Empty Deleted Messages</td>
                                 </tr>
                             @elseif ($messages->isNotEmpty())
                                 @foreach ($messages as $key => $message)
@@ -53,13 +53,16 @@
                                                     onClick="return confirm('Are you sure to delete?')"
                                                     class="btn btn-danger btn-xs">Delete</a>
                                             </td>
-                                              <td><a href="{{ route('send_now', ['id' => $message->id]) }}"
+                                            <td><a href="{{ route('send_now', ['id' => $message->id]) }}"
                                                     class="btn btn-primary btn-xs">Send Now</a>
-                                                    <a href=""
-                                                    class="btn btn-secondary btn-xs">Send Later</a></td>
+                                                <a href="" class="btn btn-secondary btn-xs">Send Later</a>
+                                            </td>
                                         @else
-                                            <td> <a href="{{ route('history_customer_view', ['id' => $message->id]) }}"
-                                                    class="btn btn-primary btn-xs">View</a></td>
+                                            <td> <a href="" onClick="return confirm('This ?')"
+                                                    class="btn btn-success btn-xs">Recovery</a>
+                                                <a href="" onClick="return confirm('This ?')"
+                                                    class="btn btn-danger btn-xs">Deleted</a>
+                                            </td>
                                             <td style="color:grey">None</td>
                                         @endif
 

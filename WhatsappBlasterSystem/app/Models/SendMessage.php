@@ -12,7 +12,7 @@ class SendMessage extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['message_id','blaster_id','customer_id','full_message','send_time'];
+    protected $fillable = ['user_id','message_id','blaster_id','customer_id','full_message','send_time'];
 
     public function messages()
     {
