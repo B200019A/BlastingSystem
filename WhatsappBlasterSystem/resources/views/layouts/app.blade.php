@@ -19,7 +19,7 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/css/app.css'])
-    {{-- <script type="text/javascript" src="{{asset('function.js')}}" ></script> --}}
+    <script type="text/javascript" src="{{asset('function.js')}}" ></script>
 </head>
 @if (Session::has('error'))
     <!---for error user alert--->
