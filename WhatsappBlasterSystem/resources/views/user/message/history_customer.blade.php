@@ -21,7 +21,7 @@
                             @foreach ($customersMessages as $key => $customersMessage)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
-                                    <td>{{ $customersMessage->blasters->name }}</td>
+                                    <td>{{ isset($customersMessage->blasters->name) ? $customersMessage->blasters->name: "Blaster already delete"  }}</td>
                                     <td>{{ $customersMessage->customers->attribute1 }}</td>
                                     <td>{{ $customersMessage->full_message }}</td>
                                     {{-- mean that resend successful  --}}

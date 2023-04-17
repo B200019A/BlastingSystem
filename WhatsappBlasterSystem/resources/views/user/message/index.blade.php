@@ -37,7 +37,7 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $message->message }}</td>
-                                        <td>{{ $message->blasters->name }}</td>
+                                        <td>{{ isset($message->blasters->name) ? $message->blasters->name : 'none' }}</td>
                                         <td>{{ $message->send_time }}</td>
                                         @if (isset($message->image))
                                             <td><a class="viewImage" data-toggle="modal"
@@ -58,10 +58,9 @@
                                                 <a href="" class="btn btn-secondary btn-xs">Send Later</a>
                                             </td>
                                         @else
-                                            <td> <a href="" onClick="return confirm('This ?')"
+                                            <td> <a href="{{ route('restore', ['id' => $message->id]) }}"
+                                                    onClick="return confirm('Are you sure to restore?')"
                                                     class="btn btn-success btn-xs">Recovery</a>
-                                                <a href="" onClick="return confirm('This ?')"
-                                                    class="btn btn-danger btn-xs">Deleted</a>
                                             </td>
                                             <td style="color:grey">None</td>
                                         @endif

@@ -24,8 +24,8 @@
                                     <tr>
                                     <td>{{ $key+1}}</td>
 
-                                        <td>{{ $sendMessage->messages->message }}</td>
-                                        <td>{{ $sendMessage->blasters->name }}</td>
+                                        <td>{{ isset($sendMessage->messages->message) ? $sendMessage->messages->message: "Message already delete"  }}</td>
+                                        <td>{{ isset($sendMessage->blasters->name) ? $sendMessage->blasters->name: "Blaster already delete"  }}</td>
                                         <td>{{ $sendMessage->send_time }}</td>
                                         @if (isset($sendMessage->messages->image))
                                             <td><a class="viewImage" data-toggle="modal"

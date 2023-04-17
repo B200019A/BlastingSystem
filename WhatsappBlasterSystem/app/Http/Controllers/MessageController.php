@@ -169,6 +169,14 @@ class MessageController extends Controller
         }
         return view('user/message/index', $data);
     }
+    public function restore($id){
+
+        $message = Message::withTrashed()->find($id);
+        if($message->user_id == Auth::id()){
+           $message->restore();
+        }
+        return back();
+    }
     public function history_view()
     {
             $data = SendMessage::where('user_id',Auth::id())->get();
@@ -185,12 +193,11 @@ class MessageController extends Controller
     public function history_customer($send_time)
     {
         //checking
-        // $message = Message::onlyTrashed()
-        //     ->where('id', $send_time)
-        //     ->first();
-        // if ($message->user_id != Auth::id()) {
-        //     return back();
-        // }
+        $message = SendMessage::where('send_time', $send_time)->first();
+        if ($message->user_id != Auth::id()) {
+            return back();
+        }
+
         $data['customersMessages'] = SendMessage::where('send_time', $send_time)->get();
 
         return view('user/message/history_customer', $data);
@@ -251,6 +258,10 @@ class MessageController extends Controller
             return back();
         }
         $currentTime = Carbon::now();
+
+        if($message->blasters == null){
+            return back()->with('error', 'Blaster List Not Exist!');;
+        }
         foreach ($message->blasters->customers as $customers) {
             //orignal text
             $oriText = $message->message;

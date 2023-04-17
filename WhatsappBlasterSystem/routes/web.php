@@ -71,6 +71,7 @@ Route::prefix('user')
             Route::get('/meesage/delete/{id}', 'delete')->name('message_delete');
             Route::get('/meesage/delete', 'delete_view')->name('message_delete_view');
             Route::get('/meesage/history', 'history_view')->name('message_history_view');
+            Route::get('/meesage/restore/{id}', 'restore')->name('restore');
             Route::get('/meesage/history/customer/{id}', 'history_customer')->name('history_customer_view');
             Route::get('/meesage/resend/{id}', 'resend')->name('resend_message');
             Route::post('/test', 'test')->name('test');
