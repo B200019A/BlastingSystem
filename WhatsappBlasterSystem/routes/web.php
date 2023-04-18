@@ -51,6 +51,8 @@ Route::prefix('user')
             Route::get('/blaster/edit/{id}', 'edit')->name('blaster_edit');
             Route::post('/blaster/update', 'update')->name('blaster_update');
             Route::get('/blaster/delete/{id}', 'delete')->name('blaster_delete');
+            Route::get('/blaster/history', 'delete_view')->name('blaster_delete_view');
+            Route::get('/blaster/restore/{id}', 'restore')->name('blaster_restore');
         });
 
         Route::controller(App\Http\Controllers\CustomerController::class)->group(function () {
@@ -71,7 +73,7 @@ Route::prefix('user')
             Route::get('/meesage/delete/{id}', 'delete')->name('message_delete');
             Route::get('/meesage/delete', 'delete_view')->name('message_delete_view');
             Route::get('/meesage/history', 'history_view')->name('message_history_view');
-            Route::get('/meesage/restore/{id}', 'restore')->name('restore');
+            Route::get('/meesage/restore/{id}', 'restore')->name('message_restore');
             Route::get('/meesage/history/customer/{id}', 'history_customer')->name('history_customer_view');
             Route::get('/meesage/resend/{id}', 'resend')->name('resend_message');
             Route::post('/test', 'test')->name('test');

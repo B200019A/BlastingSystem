@@ -58,7 +58,7 @@
                                                 <a href="" class="btn btn-secondary btn-xs">Send Later</a>
                                             </td>
                                         @else
-                                            <td> <a href="{{ route('restore', ['id' => $message->id]) }}"
+                                            <td> <a href="{{ route('message_restore', ['id' => $message->id]) }}"
                                                     onClick="return confirm('Are you sure to restore?')"
                                                     class="btn btn-success btn-xs">Recovery</a>
                                             </td>

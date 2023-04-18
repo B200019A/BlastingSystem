@@ -85,6 +85,7 @@
                                         <a class="dropdown-item" href="{{ route('blaster_add_view') }}">Add
                                             List</a>
                                         <a class="dropdown-item" href="{{ route('blaster_view') }}">View List</a>
+                                        <a class="dropdown-item" href="{{ route('blaster_delete_view') }}">Deleted List</a>
                                     </div>
                                 </li>
                                 <li class="nav-item dropdown">

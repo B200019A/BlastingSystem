@@ -81,4 +81,22 @@ class BlasterController extends Controller
 
         return redirect()->route('blaster_view_customer', $blaster->id);
     }
+    public function delete_view()
+    {
+        $data['blasters'] = Blaster::onlyTrashed()
+            ->where('user_id', Auth::id())
+            ->get();
+        if ($data['blasters']->count() == null) {
+            $data['blasters'] = 'message_history_null';
+        }
+        return view('user/blaster/index', $data);
+    }
+    public function restore($id){
+
+        $blaster = Blaster::withTrashed()->find($id);
+        if($blaster->user_id == Auth::id()){
+           $blaster->restore();
+        }
+        return back();
+    }
 }

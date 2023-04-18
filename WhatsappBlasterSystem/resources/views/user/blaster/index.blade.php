@@ -23,12 +23,19 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $blaster->name }} </td>
                                         <td> {{ $blaster->customers->count() }}</td>
+                                        @if($blaster->deleted_at== null)
                                         <td><a href="{{ route('blaster_view_customer', ['id' => $blaster->id]) }}"
                                                 class="btn btn-primary btn-xs">view customer</a>
                                             <a href="{{ route('blaster_delete', ['id' => $blaster->id]) }}"
                                                 onClick="return confirm('Are you sure to delete?')"
                                                 class="btn btn-danger btn-xs">Delete</a>
                                         </td>
+                                        @else
+                                        <td> <a href="{{ route('blaster_restore', ['id' => $blaster->id]) }}"
+                                                    onClick="return confirm('Are you sure to restore?')"
+                                                    class="btn btn-success btn-xs">Recovery</a>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             @else
