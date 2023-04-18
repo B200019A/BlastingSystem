@@ -29,7 +29,7 @@
                                         <td>{{ $sendMessage->send_time }}</td>
                                         @if (isset($sendMessage->messages->image))
                                             <td><a class="viewImage" data-toggle="modal"
-                                                    data-id="{{ asset('images') }}/{{ $sendMessage->messages->image }}"
+                                                    data-id="{{ asset('public/images') }}/{{ $sendMessage->messages->image }}"
                                                     data-target="#imageModal">{{ $sendMessage->messages->image }}</a></td>
                                         @else
                                             <td style="color:grey;">None</td>
