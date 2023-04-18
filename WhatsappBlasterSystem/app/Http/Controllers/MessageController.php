@@ -60,10 +60,19 @@ class MessageController extends Controller
 
         $image = $request->file('message_image') ? $request->file('message_image') : null;
         $imageName = null;
+
         if ($image) {
-            $destinationPath = 'images';
-            $image->move(public_path($destinationPath), $image->getClientOriginalName()); //images is the location
             $imageName = $image->getClientOriginalName();
+            $destinationPath = public_path('images');
+            if($image->getSize() >= 500001){
+                $img = Image::make($request->file('message_image')->getRealPath());
+                $height = $img->height() / 4; //get 1/4th of image height
+                $width = $img->width() / 4; //get 1/4th of image width
+                //resize and then store image to pulbic/images
+                $imageFile = $img->resize($width, $height)->save($destinationPath . '/' . $imageName);
+            }else{
+                $image->move($destinationPath, $imageName); //images is the location
+            }
         }
 
         $message = Message::create([
@@ -90,8 +99,8 @@ class MessageController extends Controller
     }
     public function update(Request $request)
     {
-         //valdiate
-         if ($request->file('message_image') != null) {
+        //valdiate
+        if ($request->file('message_image') != null) {
             $validated = $request->validate([
                 'message' => 'required|string',
                 'date' => 'required|string',
@@ -125,10 +134,21 @@ class MessageController extends Controller
         }
         if ($request->file('message_image') != '' && $blaster->image != $request->file('message_image')->getClientOriginalName()) {
             $image = $request->file('message_image');
-            $destinationPath = 'images';
-            $image->move(public_path($destinationPath), $image->getClientOriginalName()); //images is the location
             $imageName = $image->getClientOriginalName();
+            $destinationPath = public_path('images');
+
+            if($image->getSize() >= 500001){
+                $img = Image::make($request->file('message_image')->getRealPath());
+                $height = $img->height() / 4; //get 1/4th of image height
+                $width = $img->width() / 4; //get 1/4th of image width
+                //resize and then store image to pulbic/images
+                $imageFile = $img->resize($width, $height)->save($destinationPath . '/' . $imageName);
+            }else{
+                $image->move($destinationPath, $imageName); //images is the location
+            }
+            //save to databse update image
             $message->image = $imageName;
+
         }
 
         $message->message = $request->message;
@@ -169,24 +189,23 @@ class MessageController extends Controller
         }
         return view('user/message/index', $data);
     }
-    public function restore($id){
-
+    public function restore($id)
+    {
         $message = Message::withTrashed()->find($id);
-        if($message->user_id == Auth::id()){
-           $message->restore();
+        if ($message->user_id == Auth::id()) {
+            $message->restore();
         }
         return back();
     }
     public function history_view()
     {
-            $data = SendMessage::where('user_id',Auth::id())->get();
-            $data = $data->groupBy('send_time');
-            $sendMessages = [];
-            foreach($data as $key=> $data){
-                $searchMessage = SendMessage::where('send_time',$key)->first();
-                array_push($sendMessages, $searchMessage);
-
-            };
+        $data = SendMessage::where('user_id', Auth::id())->get();
+        $data = $data->groupBy('send_time');
+        $sendMessages = [];
+        foreach ($data as $key => $data) {
+            $searchMessage = SendMessage::where('send_time', $key)->first();
+            array_push($sendMessages, $searchMessage);
+        }
         return view('user/message/send_message')->with('sendMessages', $sendMessages);
     }
 
@@ -259,8 +278,8 @@ class MessageController extends Controller
         }
         $currentTime = Carbon::now();
 
-        if($message->blasters == null){
-            return back()->with('error', 'Blaster List Not Exist!');;
+        if ($message->blasters == null) {
+            return back()->with('error', 'Blaster List Not Exist!');
         }
         foreach ($message->blasters->customers as $customers) {
             //orignal text
@@ -330,38 +349,6 @@ class MessageController extends Controller
             $find_send_messages->save();
             // $message->delete();
         }
-        return back();
-    }
-    public function test(Request $request)
-    {
-        //valdiate
-        $validated = $request->validate([
-            'message_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
-        ]);
-
-        //me
-        // $image = $request->file('message_image') ? $request->file('message_image') : null;
-        // $imageName = null;
-        // if ($image) {
-        //     $destinationPath = 'images';
-        //     $image->move(public_path($destinationPath), $image->getClientOriginalName()); //images is the location
-        //     $imageName = $image->getClientOriginalName();
-        // }
-
-        // reference
-        $image = $request->file('message_image') ? $request->file('message_image') : null;
-        $input['imagename'] = time() . '.' . $image->getClientOriginalExtension();
-        $destinationPath = public_path('images');
-
-        $img = Image::make($request->file('message_image')->getRealPath());
-        $img->resize(100, 100, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save($destinationPath . '/' . $input['imagename']);
-
-        $destinationPath = public_path('/images');
-        $image->move($destinationPath, $input['imagename']);
-
-        //$this->postImage->add($input);
         return back();
     }
 }
