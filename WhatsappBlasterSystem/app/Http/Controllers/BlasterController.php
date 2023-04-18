@@ -87,7 +87,7 @@ class BlasterController extends Controller
             ->where('user_id', Auth::id())
             ->get();
         if ($data['blasters']->count() == null) {
-            $data['blasters'] = 'message_history_null';
+            $data['blasters'] = 'blaster_history_null';
         }
         return view('user/blaster/index', $data);
     }

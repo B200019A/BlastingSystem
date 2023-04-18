@@ -4,7 +4,13 @@
         <div class="row">
             <div class="card p-0 rounded-4">
                 <div class="card-header">
-                    <h1 class="text-center mb-md-3 mt-md-3">Blaster List</h1>
+                      @if ($blasters == 'blaster_history_null')
+                        <h1 class="text-center mb-md-3 mt-md-3">Recently Deleted Blaster List</h1>
+                    @elseif($blasters->isNotEmpty() && $blasters[0]->deleted_at != null)
+                        <h1 class="text-center mb-md-3 mt-md-3">Recently Deleted Message List</h1>
+                    @else
+                        <h1 class="text-center mb-md-3 mt-md-3">Blaster List</h1>
+                    @endif
                 </div>
                 <div class="p-4">
                     <table id="myTable">
@@ -17,7 +23,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if ($blasters->isNotEmpty())
+                            @if ($blasters)
+                                @if($blasters == "blaster_history_null")
+                                 <tr>
+                                    <td colspan="5" class="text-center">Empty Deleted Blaster</td>
+                                </tr>
+                                @else
                                 @foreach ($blasters as $key => $blaster)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
@@ -38,6 +49,7 @@
                                         @endif
                                     </tr>
                                 @endforeach
+                                @endif
                             @else
                                 <tr>
                                     <td colspan="5" class="text-center">Add Blaster List now!</td>
