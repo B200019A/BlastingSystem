@@ -81,8 +81,6 @@
     </div>
 
     <script>
-        var timeRange = document.querySelector("#time");
-
         var dateRange = document.querySelector("#date");
         var date_now = new Date().getTime();
         var date_now = new Date(date_now);
@@ -98,15 +96,8 @@
             day = (day < 10) ? '0' + day : day;
             return year + '-' + month + '-' + day;
         }
-        to_time = function(date) {
-            let time = date.getTime();
-            console.log(time + 600000);
-            return time + 600000;
-        }
 
         var min = to_YY_MM_DD(date_now);
-        var time_min = to_time(date_now);
-        timeRange.setAttribute("min", time_min);
 
         dateRange.setAttribute("min", min);
     </script>
