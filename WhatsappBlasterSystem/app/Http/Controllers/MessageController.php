@@ -30,19 +30,20 @@ class MessageController extends Controller
 
     public function add(Request $request)
     {
+        $currentTime = Carbon::now()->format('H:i');
         //valdiate
         if ($request->file('message_image') != null) {
             $validated = $request->validate([
                 'message' => 'required|string',
                 'date' => 'required|string',
-                'time' => 'required|string',
+                'time' => 'date_format:H:i|after:' . date('H:i', strtotime("+05 minutes", strtotime($currentTime))),
                 'message_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
             ]);
         } else {
             $validated = $request->validate([
                 'message' => 'required|string',
                 'date' => 'required|string',
-                'time' => 'required|string',
+                'time' => 'date_format:H:i|after:' . date('H:i', strtotime("+05 minutes", strtotime($currentTime))),
             ]);
         }
 
@@ -99,19 +100,21 @@ class MessageController extends Controller
     }
     public function update(Request $request)
     {
+        $currentTime = Carbon::now()->format('H:i');
+
         //valdiate
         if ($request->file('message_image') != null) {
             $validated = $request->validate([
                 'message' => 'required|string',
                 'date' => 'required|string',
-                'time' => 'required|string',
+                'time' => 'date_format:H:i|after:' . date('H:i', strtotime("+05 minutes", strtotime($currentTime))),
                 'message_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
             ]);
         } else {
             $validated = $request->validate([
                 'message' => 'required|string',
                 'date' => 'required|string',
-                'time' => 'required|string',
+                'time' => 'date_format:H:i|after:' . date('H:i', strtotime("+05 minutes", strtotime($currentTime))),
             ]);
         }
 

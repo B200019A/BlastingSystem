@@ -8,6 +8,7 @@ use App\Models\OnsendApi;
 use App\Models\SendMessage;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
+use Auth;
 class SendWhatsapp extends Command
 {
     /**
@@ -35,6 +36,7 @@ class SendWhatsapp extends Command
         $messages = Message::where('send_time', $currentTime)->get();
 
         foreach ($messages as $message) {
+            $currentTime = Carbon::now();
             foreach ($message->blasters->customers as $customers) {
                 //orignal text
                 $oriText = $message->message;
@@ -48,18 +50,19 @@ class SendWhatsapp extends Command
                 $oriText = str_replace('[attribute7]', $customers->attribute7, $oriText);
                 //store send message table
                 $send_messages = SendMessage::create([
+                    'user_id' => $message->user_id,
                     'message_id' => $message->id,
                     'blaster_id' => $message->blasters->id,
                     'customer_id' => $customers->id,
                     'full_message' => $oriText,
-                    'phone' => $message->phone,
+                    'send_time' => $currentTime, //store current time
                 ]);
             }
             //send message to customer
             $api = OnsendApi::where('user_id', $message->user_id)->first();
             $apiKey = $api->api;
 
-            $find_send_messages = SendMessage::where('message_id', $message->id)->get();
+            $find_send_messages = SendMessage::where('send_time', $currentTime)->get();
             foreach ($find_send_messages as $find_send_messages) {
                 //get phone number
                 $phoneNumber = $find_send_messages->customers->attribute1;
@@ -99,7 +102,6 @@ class SendWhatsapp extends Command
                     }
                 }
                 $find_send_messages->save();
-                $message->delete();
             }
         }
         $this->info('Successfully sent Whatsapp quote to target send time.');
